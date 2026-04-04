@@ -1,0 +1,2312 @@
+[
+  {
+    "id": "0001",
+    "name": "アイラ",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/aira.png"
+  },
+  {
+    "id": "0002",
+    "name": "アオイ",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/aoi.png"
+  },
+  {
+    "id": "0003",
+    "name": "アオイ(編入生)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/aoi_s.png"
+  },
+  {
+    "id": "0004",
+    "name": "アオイ(作業服)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/aoi_w.png"
+  },
+  {
+    "id": "0005",
+    "name": "アオイ(キャンプ)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/aoi_c.png"
+  },
+  {
+    "id": "0006",
+    "name": "アオイ(パイロット)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/aoi_p.png"
+  },
+  {
+    "id": "0007",
+    "name": "アカリ",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/akari.png"
+  },
+  {
+    "id": "0008",
+    "name": "アカリ(エンジェル)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/akari_a.png"
+  },
+  {
+    "id": "0009",
+    "name": "アカリ(クリスマス)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/akari_c.png"
+  },
+  {
+    "id": "0010",
+    "name": "アキノ",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/akino.png"
+  },
+  {
+    "id": "0011",
+    "name": "アキノ(クリスマス)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/akino_c.png"
+  },
+  {
+    "id": "0012",
+    "name": "アキノ(サマー)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/akino_s.png"
+  },
+  {
+    "id": "0013",
+    "name": "アキノ＆サレン",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/akisare.png"
+  },
+  {
+    "id": "0014",
+    "name": "アネモネ",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/anemone.png"
+  },
+  {
+    "id": "0015",
+    "name": "アネモネ(サマー)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/anemone_s.png"
+  },
+  {
+    "id": "0016",
+    "name": "アメス",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/amesu.png"
+  },
+  {
+    "id": "0017",
+    "name": "アメス(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/amesu_s.png"
+  },
+  {
+    "id": "0018",
+    "name": "アヤネ",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/ayane.png"
+  },
+  {
+    "id": "0019",
+    "name": "アヤネ(クリスマス)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/ayane_c.png"
+  },
+  {
+    "id": "0020",
+    "name": "アヤネ(エクスプローラー)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/ayane_e.png"
+  },
+  {
+    "id": "0021",
+    "name": "アユミ",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/ayumi.png"
+  },
+  {
+    "id": "0022",
+    "name": "アユミ(ワンダー)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/ayumi_w.png"
+  },
+  {
+    "id": "0023",
+    "name": "アユミ(怪盗)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/ayumi_k.png"
+  },
+  {
+    "id": "0024",
+    "name": "アラクネ",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/arakune.png"
+  },
+  {
+    "id": "0025",
+    "name": "アリサ",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/arisa.png"
+  },
+  {
+    "id": "0026",
+    "name": "アン",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/an.png"
+  },
+  {
+    "id": "0027",
+    "name": "アン＆グレア",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/angure.png"
+  },
+  {
+    "id": "0028",
+    "name": "アンナ",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/anna.png"
+  },
+  {
+    "id": "0029",
+    "name": "アンナ(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/anna_s.png"
+  },
+  {
+    "id": "0030",
+    "name": "アンナ(パイレーツ)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/anna_p.png"
+  },
+  {
+    "id": "0031",
+    "name": "イオ",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/io.png"
+  },
+  {
+    "id": "0032",
+    "name": "イオ(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/io_s.png"
+  },
+  {
+    "id": "0033",
+    "name": "イオ(ノワール)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/io_n.png"
+  },
+  {
+    "id": "0034",
+    "name": "イオ(クリスマス)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/io_c.png"
+  },
+  {
+    "id": "0035",
+    "name": "イノリ",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/inori.png"
+  },
+  {
+    "id": "0036",
+    "name": "イノリ(タイムトラベル)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/inori_t.png"
+  },
+  {
+    "id": "0037",
+    "name": "イノリ(怪盗)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/inori_k.png"
+  },
+  {
+    "id": "0038",
+    "name": "イノリ(ニューイヤー)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/inori_n.png"
+  },
+  {
+    "id": "0039",
+    "name": "イリヤ",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/iriya.png"
+  },
+  {
+    "id": "0040",
+    "name": "イリヤ(クリスマス)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/iriya_c.png"
+  },
+  {
+    "id": "0041",
+    "name": "イリヤ(ニューイヤー)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/iriya_n.png"
+  },
+  {
+    "id": "0042",
+    "name": "イリヤ(儀装束)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/iriya_g.png"
+  },
+  {
+    "id": "0043",
+    "name": "イロハ",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/iroha.png"
+  },
+  {
+    "id": "0044",
+    "name": "ヴァイオレット",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/vaioret.png"
+  },
+  {
+    "id": "0045",
+    "name": "ヴァイオレット(イサナミ)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/vaioret_i.png"
+  },
+  {
+    "id": "0046",
+    "name": "ヴァンピィ",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/vanpi.png"
+  },
+  {
+    "id": "0047",
+    "name": "ウヅキ(デレマス)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/uduki.png"
+  },
+  {
+    "id": "0048",
+    "name": "ヴルム",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/vurumu.png"
+  },
+  {
+    "id": "0049",
+    "name": "エキドナ(サマー)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/ekidona_s.png"
+  },
+  {
+    "id": "0050",
+    "name": "エミリア",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/emiria.png"
+  },
+  {
+    "id": "0051",
+    "name": "エミリア(サマー)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/emiria_s.png"
+  },
+  {
+    "id": "0052",
+    "name": "エリコ",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/eriko.png"
+  },
+  {
+    "id": "0053",
+    "name": "エリコ(バレンタイン)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/eriko_v.png"
+  },
+  {
+    "id": "0054",
+    "name": "エリコ(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/eriko_s.png"
+  },
+  {
+    "id": "0055",
+    "name": "エリコ(コマンダー)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/eriko_c.png"
+  },
+  {
+    "id": "0056",
+    "name": "エリス",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/erisu.png"
+  },
+  {
+    "id": "0057",
+    "name": "エリス(サマー)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/erisu_s.png"
+  },
+  {
+    "id": "0058",
+    "name": "カイザーインサイト",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/kaizar.png"
+  },
+  {
+    "id": "0059",
+    "name": "カオリ",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/kaori.png"
+  },
+  {
+    "id": "0060",
+    "name": "カオリ(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/kaori_s.png"
+  },
+  {
+    "id": "0061",
+    "name": "カオリ(ハロウィン)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/kaori_h.png"
+  },
+  {
+    "id": "0062",
+    "name": "カスミ",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/kasumi.png"
+  },
+  {
+    "id": "0063",
+    "name": "カスミ(マジカル)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/kasumi_m.png"
+  },
+  {
+    "id": "0064",
+    "name": "カスミ(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/kasumi_s.png"
+  },
+  {
+    "id": "0065",
+    "name": "カスミ(ニューイヤー)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/kasumi_n.png"
+  },
+  {
+    "id": "0066",
+    "name": "カスミ(シスター)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/kasumi_si.png"
+  },
+  {
+    "id": "0067",
+    "name": "カノン",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/kanon.png"
+  },
+  {
+    "id": "0068",
+    "name": "カヤ",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/kaya.png"
+  },
+  {
+    "id": "0069",
+    "name": "カヤ(タイムトラベル)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/kaya_t.png"
+  },
+  {
+    "id": "0070",
+    "name": "カヤ(リベレイター)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/kaya_r.png"
+  },
+  {
+    "id": "0071",
+    "name": "カリン",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/karin.png"
+  },
+  {
+    "id": "0072",
+    "name": "カリン(アルケミスト)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/karin_a.png"
+  },
+  {
+    "id": "0073",
+    "name": "キャル",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/kyaru.png"
+  },
+  {
+    "id": "0074",
+    "name": "キャル(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/kyaru_s.png"
+  },
+  {
+    "id": "0075",
+    "name": "キャル(ニューイヤー)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/kyaru_n.png"
+  },
+  {
+    "id": "0076",
+    "name": "キャル(オーバーロード)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/kyaru_o.png"
+  },
+  {
+    "id": "0077",
+    "name": "キャル(編入生)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/kyaru_h.png"
+  },
+  {
+    "id": "0078",
+    "name": "キャル(プリンセス)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/kyaru_p.png"
+  },
+  {
+    "id": "0079",
+    "name": "キョウカ",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/kyoka.png"
+  },
+  {
+    "id": "0080",
+    "name": "キョウカ(ハロウィン)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/kyoka_h.png"
+  },
+  {
+    "id": "0081",
+    "name": "キョウカ(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/kyoka_s.png"
+  },
+  {
+    "id": "0082",
+    "name": "キョウカ(スプリング)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/kyoka_sp.png"
+  },
+  {
+    "id": "0083",
+    "name": "クウカ",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/kuuka.png"
+  },
+  {
+    "id": "0084",
+    "name": "クウカ(オーエド)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/kuuka_o.png"
+  },
+  {
+    "id": "0085",
+    "name": "クウカ(ノワール)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/kuuka_n.png"
+  },
+  {
+    "id": "0086",
+    "name": "クウカ(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/kuuka_s.png"
+  },
+  {
+    "id": "0087",
+    "name": "クリア(フォールン)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/kuria_f.png"
+  },
+  {
+    "id": "0088",
+    "name": "クリア(サマー)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/kuria_s.png"
+  },
+  {
+    "id": "0089",
+    "name": "クリスティーナ",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/kurisu.png"
+  },
+  {
+    "id": "0090",
+    "name": "クリスティーナ(クリスマス)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/kurisu_c.png"
+  },
+  {
+    "id": "0091",
+    "name": "クリスティーナ(ワイルド)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/kurisu_w.png"
+  },
+  {
+    "id": "0092",
+    "name": "クリスティーナ(アルファ)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/kurisu_a.png"
+  },
+  {
+    "id": "0093",
+    "name": "クルミ",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/kurumi.png"
+  },
+  {
+    "id": "0094",
+    "name": "クルミ(クリスマス)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/kurumi_c.png"
+  },
+  {
+    "id": "0095",
+    "name": "クルミ(ステージ)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/kurumi_s.png"
+  },
+  {
+    "id": "0096",
+    "name": "クルル",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/kururu.png"
+  },
+  {
+    "id": "0097",
+    "name": "グレア",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/gurea.png"
+  },
+  {
+    "id": "0098",
+    "name": "グレイス",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/gureisu.png"
+  },
+  {
+    "id": "0099",
+    "name": "グレイス(バニー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/gureisu_b.png"
+  },
+  {
+    "id": "0100",
+    "name": "クレジッタ",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/kurejita.png"
+  },
+  {
+    "id": "0101",
+    "name": "クレジッタ(クリスマス)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/kurejita_c.png"
+  },
+  {
+    "id": "0102",
+    "name": "クロエ",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/kuroe.png"
+  },
+  {
+    "id": "0103",
+    "name": "クロエ(聖学祭)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/kuroe_s.png"
+  },
+  {
+    "id": "0104",
+    "name": "クロエ(ウィンター)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/kuroe_w.png"
+  },
+  {
+    "id": "0105",
+    "name": "クローチェ",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/kuroche.png"
+  },
+  {
+    "id": "0106",
+    "name": "クローチェ(エアリアル)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/kuroche_e.png"
+  },
+  {
+    "id": "0107",
+    "name": "コッコロ",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/kokoro.png"
+  },
+  {
+    "id": "0108",
+    "name": "コッコロ(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/kokoro_s.png"
+  },
+  {
+    "id": "0109",
+    "name": "コッコロ(ニューイヤー)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/kokoro_n.png"
+  },
+  {
+    "id": "0110",
+    "name": "コッコロ(儀装束)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/kokoro_g.png"
+  },
+  {
+    "id": "0111",
+    "name": "コッコロ(レンジャー)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/kokoro_r.png"
+  },
+  {
+    "id": "0112",
+    "name": "コッコロ(嚮導幼君)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/kokoro_gu.png"
+  },
+  {
+    "id": "0113",
+    "name": "コッコロ(プリンセス)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/kuroche_e.png"
+  },
+  {
+    "id": "0114",
+    "name": "サクラ",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/sakura.png"
+  },
+  {
+    "id": "0115",
+    "name": "サツキ",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/satuki.png"
+  },
+  {
+    "id": "0116",
+    "name": "サレン",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/saren.png"
+  },
+  {
+    "id": "0117",
+    "name": "サレン(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/saren_s.png"
+  },
+  {
+    "id": "0118",
+    "name": "サレン(クリスマス)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/saren_c.png"
+  },
+  {
+    "id": "0119",
+    "name": "サレン(サラサリア)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/saren_sa.png"
+  },
+  {
+    "id": "0120",
+    "name": "サレン(ニューイヤー)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/saren_n.png"
+  },
+  {
+    "id": "0121",
+    "name": "ジータ",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/jita.png"
+  },
+  {
+    "id": "0122",
+    "name": "ジータ(ウォーロック)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/jita_w.png"
+  },
+  {
+    "id": "0123",
+    "name": "シェフィ",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/siefi.png"
+  },
+  {
+    "id": "0124",
+    "name": "シェフィ(ニューイヤー)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/siefi_n.png"
+  },
+  {
+    "id": "0125",
+    "name": "シェフィ(サマー)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/siefi_s.png"
+  },
+  {
+    "id": "0126",
+    "name": "シェフィ(プリンセス)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/siefi_p.png"
+  },
+  {
+    "id": "0127",
+    "name": "シオリ",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/siori.png"
+  },
+  {
+    "id": "0128",
+    "name": "シオリ(マジカル)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/siori_m.png"
+  },
+  {
+    "id": "0129",
+    "name": "シオリ(レンジャー)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/siori_r.png"
+  },
+  {
+    "id": "0130",
+    "name": "シオリ(ウィンター)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/siori_w.png"
+  },
+  {
+    "id": "0131",
+    "name": "シズル",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/sizuru.png"
+  },
+  {
+    "id": "0132",
+    "name": "シズル(バレンタイン)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/sizuru_v.png"
+  },
+  {
+    "id": "0133",
+    "name": "シズル(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/sizuru_s.png"
+  },
+  {
+    "id": "0134",
+    "name": "シズル(ノワール)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/sizuru_n.png"
+  },
+  {
+    "id": "0135",
+    "name": "シズル(ニューイヤー)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/sizuru_ne.png"
+  },
+  {
+    "id": "0136",
+    "name": "シズル＆リノ",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/sizurino.png"
+  },
+  {
+    "id": "0137",
+    "name": "シナツ",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/sinatu.png"
+  },
+  {
+    "id": "0138",
+    "name": "シノブ",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/sinobu.png"
+  },
+  {
+    "id": "0139",
+    "name": "シノブ(ハロウィン)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/sinobu_h.png"
+  },
+  {
+    "id": "0140",
+    "name": "シノブ(パイレーツ)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/sinobu_p.png"
+  },
+  {
+    "id": "0141",
+    "name": "シノブ(サマー)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/sinobu_s.png"
+  },
+  {
+    "id": "0142",
+    "name": "ジュン",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/jyun.png"
+  },
+  {
+    "id": "0143",
+    "name": "ジュン(サマー)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/jyun_s.png"
+  },
+  {
+    "id": "0144",
+    "name": "ジュン(クリスマス)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/jyun_c.png"
+  },
+  {
+    "id": "0145",
+    "name": "スズナ",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/suzuna.png"
+  },
+  {
+    "id": "0146",
+    "name": "スズナ(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/suzuna_s.png"
+  },
+  {
+    "id": "0147",
+    "name": "スズナ(ハロウィン)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/suzuna_h.png"
+  },
+  {
+    "id": "0148",
+    "name": "スズナ(編入生)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/suzuna_he.png"
+  },
+  {
+    "id": "0149",
+    "name": "スズメ",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/suzume.png"
+  },
+  {
+    "id": "0150",
+    "name": "スズメ(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/suzume_s.png"
+  },
+  {
+    "id": "0151",
+    "name": "スズメ(ニューイヤー)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/suzume_n.png"
+  },
+  {
+    "id": "0152",
+    "name": "スズメ(スプリング)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/suzume_sp.png"
+  },
+  {
+    "id": "0153",
+    "name": "ソノ",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/sono.png"
+  },
+  {
+    "id": "0154",
+    "name": "タマキ",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/tamaki.png"
+  },
+  {
+    "id": "0155",
+    "name": "タマキ(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/tamaki_s.png"
+  },
+  {
+    "id": "0156",
+    "name": "タマキ(作業服)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/tamaki_w.png"
+  },
+  {
+    "id": "0157",
+    "name": "タマキ(カフェ)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/tamaki_c.png"
+  },
+  {
+    "id": "0158",
+    "name": "チエル",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/tieru.png"
+  },
+  {
+    "id": "0159",
+    "name": "チエル(聖学祭)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/tieru_s.png"
+  },
+  {
+    "id": "0160",
+    "name": "チエル(ウィンター)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/tieru_w.png"
+  },
+  {
+    "id": "0161",
+    "name": "チカ",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/tika.png"
+  },
+  {
+    "id": "0162",
+    "name": "チカ(クリスマス)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/tika_c.png"
+  },
+  {
+    "id": "0163",
+    "name": "チカ(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/tika_s.png"
+  },
+  {
+    "id": "0164",
+    "name": "チカ(儀装束)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/tika_g.png"
+  },
+  {
+    "id": "0165",
+    "name": "ツムギ",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/tumugi.png"
+  },
+  {
+    "id": "0166",
+    "name": "ツムギ(ハロウィン)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/tumugi_h.png"
+  },
+  {
+    "id": "0167",
+    "name": "ツムギ(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/tumugi_s.png"
+  },
+  {
+    "id": "0168",
+    "name": "ツムギ(ジオ・ゲヘナ)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/tumugi_z.png"
+  },
+  {
+    "id": "0169",
+    "name": "トモ",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/tomo.png"
+  },
+  {
+    "id": "0170",
+    "name": "トモ(マジカル)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/tomo_m.png"
+  },
+  {
+    "id": "0171",
+    "name": "トモ(ハロウィン)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/tomo_h.png"
+  },
+  {
+    "id": "0172",
+    "name": "ナーナ",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/nana.png"
+  },
+  {
+    "id": "0173",
+    "name": "ナナカ",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/nanaka.png"
+  },
+  {
+    "id": "0174",
+    "name": "ナナカ(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/nanaka_s.png"
+  },
+  {
+    "id": "0175",
+    "name": "ナナカ(ハロウィン)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/nanaka_h.png"
+  },
+  {
+    "id": "0176",
+    "name": "ニノン",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/ninon.png"
+  },
+  {
+    "id": "0177",
+    "name": "ニノン(オーエド)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/ninon_o.png"
+  },
+  {
+    "id": "0178",
+    "name": "ニノン(ハロウィン)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/ninon_h.png"
+  },
+  {
+    "id": "0179",
+    "name": "ニノン(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/ninon_s.png"
+  },
+  {
+    "id": "0180",
+    "name": "ネア",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/nea.png"
+  },
+  {
+    "id": "0181",
+    "name": "ネア(サマー)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/nea_s.png"
+  },
+  {
+    "id": "0182",
+    "name": "ネネカ",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/neneka.png"
+  },
+  {
+    "id": "0183",
+    "name": "ネネカ(ニューイヤー)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/neneka_n.png"
+  },
+  {
+    "id": "0184",
+    "name": "ネネカ(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/neneka_s.png"
+  },
+  {
+    "id": "0185",
+    "name": "ネネカ(アルファ)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/neneka_a.png"
+  },
+  {
+    "id": "0186",
+    "name": "ネビア",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/nebia.png"
+  },
+  {
+    "id": "0187",
+    "name": "ネフィ＝ネラ",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/nefinera.png"
+  },
+  {
+    "id": "0188",
+    "name": "ネフィ＝ネラ(鬼面仏心)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/nefinera_k.png"
+  },
+  {
+    "id": "0189",
+    "name": "ノゾミ",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/nozomi.png"
+  },
+  {
+    "id": "0190",
+    "name": "ノゾミ(クリスマス)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/nozomi_c.png"
+  },
+  {
+    "id": "0191",
+    "name": "ノゾミ(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/nozomi_s.png"
+  },
+  {
+    "id": "0192",
+    "name": "ノゾミ(リベレイター)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/nozomi_r.png"
+  },
+  {
+    "id": "0193",
+    "name": "ノゾミ(アルケミスト)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/nozomi_a.png"
+  },
+  {
+    "id": "0194",
+    "name": "ハツネ",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/hatune.png"
+  },
+  {
+    "id": "0195",
+    "name": "ハツネ(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/hatune_s.png"
+  },
+  {
+    "id": "0196",
+    "name": "ハツネ(ニューイヤー)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/hatune_n.png"
+  },
+  {
+    "id": "0197",
+    "name": "ハツネ＆シオリ",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/hatusio.png"
+  },
+  {
+    "id": "0198",
+    "name": "ビカラ",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/bikara.png"
+  },
+  {
+    "id": "0199",
+    "name": "ヒヨリ",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/hiyori.png"
+  },
+  {
+    "id": "0200",
+    "name": "ヒヨリ(ニューイヤー)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/hiyori_n.png"
+  },
+  {
+    "id": "0201",
+    "name": "ヒヨリ(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/hiyori_s.png"
+  },
+  {
+    "id": "0202",
+    "name": "ヒヨリ(アストラル)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/hiyori_a.png"
+  },
+  {
+    "id": "0203",
+    "name": "ヒヨリ(サラサリア)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/hiyori_sa.png"
+  },
+  {
+    "id": "0204",
+    "name": "ヒヨリ(プリンセス)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/bikara.png"
+  },
+  {
+    "id": "0205",
+    "name": "フィオ",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/fio.png"
+  },
+  {
+    "id": "0206",
+    "name": "フブキ",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/fubuki.png"
+  },
+  {
+    "id": "0207",
+    "name": "プレシア(フォールン)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/puresia_f.png"
+  },
+  {
+    "id": "0208",
+    "name": "プレシア(サマー)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/puresia_s.png"
+  },
+  {
+    "id": "0209",
+    "name": "ペコリーヌ",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/peko.png"
+  },
+  {
+    "id": "0210",
+    "name": "ペコリーヌ(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/peko_s.png"
+  },
+  {
+    "id": "0211",
+    "name": "ペコリーヌ(ニューイヤー)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/peko_n.png"
+  },
+  {
+    "id": "0212",
+    "name": "ペコリーヌ(オーバーロード)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/peko_o.png"
+  },
+  {
+    "id": "0213",
+    "name": "ペコリーヌ(クリスマス)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/peko_c.png"
+  },
+  {
+    "id": "0214",
+    "name": "ペコリーヌ(アストライア)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/peko_a.png"
+  },
+  {
+    "id": "0215",
+    "name": "ペコリーヌ(プリンセス)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/peko_p.png"
+  },
+  {
+    "id": "0216",
+    "name": "ホウオウ",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/houo.png"
+  },
+  {
+    "id": "0217",
+    "name": "ホマレ",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/homare.png"
+  },
+  {
+    "id": "0218",
+    "name": "ホマレ(ニューイヤー)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/homare_n.png"
+  },
+  {
+    "id": "0219",
+    "name": "ホマレ(サマー)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/homare_s.png"
+  },
+  {
+    "id": "0220",
+    "name": "マコト",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/makoto.png"
+  },
+  {
+    "id": "0221",
+    "name": "マコト(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/makoto_s.png"
+  },
+  {
+    "id": "0222",
+    "name": "マコト(シンデレラ)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/makoto_si.png"
+  },
+  {
+    "id": "0223",
+    "name": "マコト(コマンダー)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/makoto_c.png"
+  },
+  {
+    "id": "0224",
+    "name": "マツリ",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/maturi.png"
+  },
+  {
+    "id": "0225",
+    "name": "マツリ(ハロウィン)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/maturi_h.png"
+  },
+  {
+    "id": "0226",
+    "name": "マツリ(ワイルド)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/maturi_w.png"
+  },
+  {
+    "id": "0227",
+    "name": "マヒル",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/mahiru.png"
+  },
+  {
+    "id": "0228",
+    "name": "マヒル(レンジャー)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/mahiru_r.png"
+  },
+  {
+    "id": "0229",
+    "name": "マヒル(クリスマス)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/mahiru_c.png"
+  },
+  {
+    "id": "0230",
+    "name": "マホ",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/maho.png"
+  },
+  {
+    "id": "0231",
+    "name": "マホ(サマー)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/maho_s.png"
+  },
+  {
+    "id": "0232",
+    "name": "マホ(シンデレラ)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/maho_si.png"
+  },
+  {
+    "id": "0233",
+    "name": "マホ(エクスプローラー)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/maho_e.png"
+  },
+  {
+    "id": "0234",
+    "name": "マホ(ドリームパーク)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/maho_d.png"
+  },
+  {
+    "id": "0235",
+    "name": "ミオ(デレマス)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/mio_d.png"
+  },
+  {
+    "id": "0236",
+    "name": "ミサキ",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/misaki.png"
+  },
+  {
+    "id": "0237",
+    "name": "ミサキ(ハロウィン)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/misaki_h.png"
+  },
+  {
+    "id": "0238",
+    "name": "ミサキ(ステージ)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/misaki_s.png"
+  },
+  {
+    "id": "0239",
+    "name": "ミサト",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/misato.png"
+  },
+  {
+    "id": "0240",
+    "name": "ミサト(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/misato_s.png"
+  },
+  {
+    "id": "0241",
+    "name": "ミサト(ニューイヤー)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/misato_n.png"
+  },
+  {
+    "id": "0242",
+    "name": "ミソギ",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/misogi.png"
+  },
+  {
+    "id": "0243",
+    "name": "ミソギ(ハロウィン)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/misogi_h.png"
+  },
+  {
+    "id": "0244",
+    "name": "ミソギ(サマー)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/misogi_s.png"
+  },
+  {
+    "id": "0245",
+    "name": "ミソギ＆ミミ＆キョウカ",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/ririri.png"
+  },
+  {
+    "id": "0246",
+    "name": "ミソラ",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/misora.png"
+  },
+  {
+    "id": "0247",
+    "name": "ミソラ(サマー)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/misora_s.png"
+  },
+  {
+    "id": "0248",
+    "name": "ミソラ(クリスマス)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/misora_c.png"
+  },
+  {
+    "id": "0249",
+    "name": "ミツキ",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/mituki.png"
+  },
+  {
+    "id": "0250",
+    "name": "ミツキ(オーエド)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/mituki_o.png"
+  },
+  {
+    "id": "0251",
+    "name": "ミツキ(ニューイヤー)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/mituki_n.png"
+  },
+  {
+    "id": "0252",
+    "name": "ミフユ",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/mifuyu.png"
+  },
+  {
+    "id": "0253",
+    "name": "ミフユ(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/mifuyu_s.png"
+  },
+  {
+    "id": "0254",
+    "name": "ミフユ(作業服)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/mifuyu_w.png"
+  },
+  {
+    "id": "0255",
+    "name": "ミミ",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/mimi.png"
+  },
+  {
+    "id": "0256",
+    "name": "ミミ(ハロウィン)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/mimi_h.png"
+  },
+  {
+    "id": "0257",
+    "name": "ミミ(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/mimi_s.png"
+  },
+  {
+    "id": "0258",
+    "name": "ミヤコ",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/miyako.png"
+  },
+  {
+    "id": "0259",
+    "name": "ミヤコ(ハロウィン)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/miyako_h.png"
+  },
+  {
+    "id": "0260",
+    "name": "ミヤコ(クリスマス)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/miyako_c.png"
+  },
+  {
+    "id": "0261",
+    "name": "ムイミ",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/muimi.png"
+  },
+  {
+    "id": "0262",
+    "name": "ムイミ(ニューイヤー)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/muimi_n.png"
+  },
+  {
+    "id": "0263",
+    "name": "ムイミ(リベレイター)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/muimi_r.png"
+  },
+  {
+    "id": "0264",
+    "name": "メドゥーサ",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/medo.png"
+  },
+  {
+    "id": "0265",
+    "name": "モニカ",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/monika.png"
+  },
+  {
+    "id": "0266",
+    "name": "モニカ(マジカル)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/monika_m.png"
+  },
+  {
+    "id": "0267",
+    "name": "モニカ(カフェ)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/monika_c.png"
+  },
+  {
+    "id": "0268",
+    "name": "モニカ(ニューイヤー)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/monika_n.png"
+  },
+  {
+    "id": "0269",
+    "name": "ヤマト",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/yamato.png"
+  },
+  {
+    "id": "0270",
+    "name": "ユイ",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/yui.png"
+  },
+  {
+    "id": "0271",
+    "name": "ユイ(ニューイヤー)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/yui_n.png"
+  },
+  {
+    "id": "0272",
+    "name": "ユイ(儀装束)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/yui_g.png"
+  },
+  {
+    "id": "0273",
+    "name": "ユイ(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/yui_s.png"
+  },
+  {
+    "id": "0274",
+    "name": "ユイ(アストラル)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/yui_a.png"
+  },
+  {
+    "id": "0275",
+    "name": "ユイ(クリスマス)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/yui_c.png"
+  },
+  {
+    "id": "0276",
+    "name": "ユイ(プリンセス)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/yui_p.png"
+  },
+  {
+    "id": "0277",
+    "name": "ユカリ",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/yukari.png"
+  },
+  {
+    "id": "0278",
+    "name": "ユカリ(クリスマス)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/yukari_c.png"
+  },
+  {
+    "id": "0279",
+    "name": "ユカリ(キャンプ)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/yukari_ca.png"
+  },
+  {
+    "id": "0280",
+    "name": "ユカリ(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/yukari_s.png"
+  },
+  {
+    "id": "0281",
+    "name": "ユキ",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/yuki.png"
+  },
+  {
+    "id": "0282",
+    "name": "ユキ(オーエド)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/yuki_o.png"
+  },
+  {
+    "id": "0283",
+    "name": "ユキ(儀装束)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/yuki_g.png"
+  },
+  {
+    "id": "0284",
+    "name": "ユキノ",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/yukino.png"
+  },
+  {
+    "id": "0285",
+    "name": "ユニ",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/yuni.png"
+  },
+  {
+    "id": "0286",
+    "name": "ユニ(聖学祭)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/yuni_s.png"
+  },
+  {
+    "id": "0287",
+    "name": "ユニ(ウィンター)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/yuni_w.png"
+  },
+  {
+    "id": "0288",
+    "name": "ヨリ",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/yori.png"
+  },
+  {
+    "id": "0289",
+    "name": "ヨリ(エンジェル)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/yori_a.png"
+  },
+  {
+    "id": "0290",
+    "name": "ヨリ(クリスマス)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/yori_c.png"
+  },
+  {
+    "id": "0291",
+    "name": "ライラエル",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/rairaeru.png"
+  },
+  {
+    "id": "0292",
+    "name": "ライラエル(クリスマス)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/rairaeru_c.png"
+  },
+  {
+    "id": "0293",
+    "name": "ライラエル(パルフェクト)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/rairaeru_p.png"
+  },
+  {
+    "id": "0294",
+    "name": "ラビリスタ",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/rabi.png"
+  },
+  {
+    "id": "0295",
+    "name": "ラビリスタ(オーバーロード)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/rabi_o.png"
+  },
+  {
+    "id": "0296",
+    "name": "ラビリスタ(アルファ)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/rabi_a.png"
+  },
+  {
+    "id": "0297",
+    "name": "ラム",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/ramu.png"
+  },
+  {
+    "id": "0298",
+    "name": "ランファ",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/ranfa.png"
+  },
+  {
+    "id": "0299",
+    "name": "ランファ(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/ranfa_s.png"
+  },
+  {
+    "id": "0300",
+    "name": "ランファ(儀装束)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/ranfa_g.png"
+  },
+  {
+    "id": "0301",
+    "name": "リノ",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/rino.png"
+  },
+  {
+    "id": "0302",
+    "name": "リノ(ワンダー)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/rino_w.png"
+  },
+  {
+    "id": "0303",
+    "name": "リノ(クリスマス)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/rino_c.png"
+  },
+  {
+    "id": "0304",
+    "name": "リノ(ニューイヤー)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/rino_n.png"
+  },
+  {
+    "id": "0305",
+    "name": "リマ",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/rima.png"
+  },
+  {
+    "id": "0306",
+    "name": "リマ(シンデレラ)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/rima_s.png"
+  },
+  {
+    "id": "0307",
+    "name": "リリ(フォールン)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/riri_f.png"
+  },
+  {
+    "id": "0308",
+    "name": "リリ(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/riri_s.png"
+  },
+  {
+    "id": "0309",
+    "name": "リン",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/rin.png"
+  },
+  {
+    "id": "0310",
+    "name": "リン(レンジャー)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/rin_r.png"
+  },
+  {
+    "id": "0311",
+    "name": "リン(ハロウィン)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/rin_h.png"
+  },
+  {
+    "id": "0312",
+    "name": "リン(デレマス)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/rin_d.png"
+  },
+  {
+    "id": "0313",
+    "name": "ルイズマリー",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/ruizumary.png"
+  },
+  {
+    "id": "0314",
+    "name": "リンド",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/rindo.png"
+  },
+  {
+    "id": "0315",
+    "name": "ルゥ",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/ruu.png"
+  },
+  {
+    "id": "0316",
+    "name": "ルカ",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/ruka.png"
+  },
+  {
+    "id": "0317",
+    "name": "ルカ(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/ruka_s.png"
+  },
+  {
+    "id": "0318",
+    "name": "ルカ(ニューイヤー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/ruka_n.png"
+  },
+  {
+    "id": "0319",
+    "name": "ルカ(サラサリア)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/ruka_sa.png"
+  },
+  {
+    "id": "0320",
+    "name": "ルナ",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/runa.png"
+  },
+  {
+    "id": "0321",
+    "name": "レイ",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/rei.png"
+  },
+  {
+    "id": "0322",
+    "name": "レイ(ニューイヤー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/rei_n.png"
+  },
+  {
+    "id": "0323",
+    "name": "レイ(ハロウィン)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/rei_h.png"
+  },
+  {
+    "id": "0324",
+    "name": "レイ(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/rei_s.png"
+  },
+  {
+    "id": "0325",
+    "name": "レイ(アストラル)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/rei_a.png"
+  },
+  {
+    "id": "0326",
+    "name": "レイ(プリンセス)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/rei_p.png"
+  },
+  {
+    "id": "0327",
+    "name": "レム",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/remu.png"
+  },
+  {
+    "id": "0328",
+    "name": "レム(サマー)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/remu_s.png"
+  },
+  {
+    "id": "0329",
+    "name": "ワカナ",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/wakana.png"
+  },
+  {
+    "id": "0330",
+    "name": "ワカナ(ウィンター)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/wakana_w.png"
+  }
+]

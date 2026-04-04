@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>プリコネ所持チェッカー</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1 class="page-title">プリコネ所持チェッカー</h1>
+    <p class="page-desc">
+      属性毎の所持キャラ、コネクトランク / 専用SPの有無のチェックに使用出来ます。<br>
+      チェックの際は所有者名欄にプレイヤーネームを入力してお使い下さい。<br>
+      入力後、URL共有の場合は「共有URL生成」、画像での共有の場合は「画像出力」を押下して下さい。
+    </p>
+
+    <div class="toolbar">
+      <div class="toolbar-inner">
+        <input id="searchInput" class="control panel" type="text" placeholder="キャラ名で検索" />
+        <input id="ownerNameInput" class="control panel" type="text" placeholder="所有者名を入力" />
+
+        <select id="ownershipFilter" class="control panel">
+          <option value="all">全表示</option>
+          <option value="owned">所持のみ</option>
+          <option value="unowned">未所持のみ</option>
+        </select>
+
+        <div class="status-bar panel">
+          <span class="status-chip" id="ownedCount">所持 0</span>
+          <span id="crCount">CR&gt;0 0</span>
+          <span id="spCount">SPあり 0</span>
+        </div>
+
+        <button id="shareBtn" class="button panel">共有URL生成</button>
+        <button id="exportBtn" class="button panel primary">画像出力</button>
+        <button id="resetBtn" class="button panel ghost">リセット</button>
+      </div>
+    </div>
+
+    <div id="app"></div>
+  </div>
+
+  <div id="modalBackdrop" class="modal-backdrop">
+    <div class="modal">
+      <h2 id="modalTitle">モーダル</h2>
+      <div id="modalBody"></div>
+      <div class="modal-actions">
+        <button id="modalCloseBtn" class="button ghost">閉じる</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>
