@@ -8,33 +8,43 @@
 </head>
 <body>
   <div class="container">
-    <h1 class="page-title">プリコネ所持チェッカー</h1>
-    <p class="page-desc">
-      属性毎の所持キャラ、コネクトランク / 専用SPの有無のチェックに使用出来ます。<br>
-      チェックの際は所有者名欄にプレイヤーネームを入力してお使い下さい。<br>
-      入力後、URL共有の場合は「共有URL生成」、画像での共有の場合は「画像出力」を押下して下さい。
-    </p>
+    <header class="page-header">
+      <div class="page-header-left">
+        <h1 class="page-title">プリコネ所持チェッカー</h1>
+        <p class="page-desc">
+          属性毎の所持キャラ、コネクトランク / 専用SPの有無のチェックに使用出来ます。<br>
+          チェックの際はプレイヤー名欄にプレイヤーネームを入力してお使い下さい。<br>
+          入力後、URL共有の場合は「共有URL生成」、画像での共有の場合は「画像出力」を押下して下さい。<br>
+          定期的にバックアップ保存しておくと、ブラウザ初期化時も復元できます。
+        </p>
+      </div>
+    </header>
+
+    <div class="status-bar panel page-summary">
+      <span class="status-chip" id="ownedCount">所持 0</span>
+      <span id="crCount">CR&gt;0 0</span>
+      <span id="spCount">SPあり 0</span>
+    </div>
 
     <div class="toolbar">
-      <div class="toolbar-inner">
+      <div class="toolbar-top">
         <input id="searchInput" class="control panel" type="text" placeholder="キャラ名で検索" />
-        <input id="ownerNameInput" class="control panel" type="text" placeholder="所有者名を入力" />
+        <input id="ownerNameInput" class="control panel" type="text" placeholder="プレイヤー名を入力" />
 
         <select id="ownershipFilter" class="control panel">
           <option value="all">全表示</option>
           <option value="owned">所持のみ</option>
           <option value="unowned">未所持のみ</option>
         </select>
+      </div>
 
-        <div class="status-bar panel">
-          <span class="status-chip" id="ownedCount">所持 0</span>
-          <span id="crCount">CR&gt;0 0</span>
-          <span id="spCount">SPあり 0</span>
-        </div>
-
-        <button id="shareBtn" class="button panel">共有URL生成</button>
-        <button id="exportBtn" class="button panel primary">画像出力</button>
-        <button id="resetBtn" class="button panel ghost">リセット</button>
+      <div class="toolbar-bottom">
+        <button id="bulkOwnedBtn" class="button panel">全所持ON</button>
+        <button id="bulkUnownedBtn" class="button panel">全所持OFF</button>
+        <button id="bulkApplyBtn" class="button panel">一括設定</button>
+        <button id="exportMenuBtn" class="button panel primary">外部出力</button>
+        <button id="backupMenuBtn" class="button panel">バックアップ</button>
+        <button id="resetBtn" class="button panel ghost reset-visible">リセット</button>
       </div>
     </div>
 

@@ -23,7 +23,8 @@ body {
 }
 
 code {
-  background: #f3f4f6;
+  background: #1f2937;
+  color: #f9fafb;
   padding: 2px 6px;
   border-radius: 6px;
   font-size: 0.95em;
@@ -35,16 +36,32 @@ code {
   padding: 24px;
 }
 
+.page-header {
+  margin-bottom: 16px;
+}
+
+.page-header-left {
+  min-width: 0;
+}
+
 .page-title {
   margin: 0 0 8px;
   font-size: 32px;
   font-weight: 700;
+  color: #ffffff;
 }
 
 .page-desc {
-  margin: 0 0 20px;
-  color: var(--muted);
-  line-height: 1.7;
+  margin: 0 0 18px;
+  color: #f3f4f6;
+  line-height: 1.8;
+  font-size: 14px;
+}
+
+.page-summary {
+  width: 100%;
+  margin-bottom: 18px;
+  justify-content: flex-start;
 }
 
 .toolbar {
@@ -56,11 +73,21 @@ code {
   padding: 12px 0 18px;
 }
 
-.toolbar-inner {
+.toolbar-top,
+.toolbar-bottom {
   display: grid;
-  grid-template-columns: 1.2fr 220px 180px 1fr auto auto auto;
-  gap: 16px;
+  gap: 12px;
   align-items: center;
+}
+
+.toolbar-top {
+  grid-template-columns: 1fr 1fr 180px;
+  margin-bottom: 12px;
+}
+
+.toolbar-bottom {
+  grid-template-columns: repeat(6, max-content);
+  justify-content: start;
 }
 
 .panel {
@@ -75,9 +102,17 @@ code {
   height: 44px;
   border: 1px solid var(--border);
   border-radius: 12px;
-  background: #fff;
+  background: #ffffff;
   padding: 0 14px;
   font-size: 14px;
+}
+
+.control {
+  color: #111111;
+}
+
+.control::placeholder {
+  color: #6b7280;
 }
 
 .control:focus,
@@ -93,6 +128,7 @@ code {
   cursor: pointer;
   font-weight: 600;
   transition: 0.18s ease;
+  color: #111111;
 }
 
 .button:hover {
@@ -106,12 +142,17 @@ code {
 }
 
 .button.ghost {
-  background: #fff;
-  color: var(--text);
+  background: #ffffff;
+  color: #111111;
+}
+
+.reset-visible {
+  color: #111111 !important;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
 }
 
 .status-bar {
-  margin-top: 0;
   padding: 12px 16px;
   display: flex;
   gap: 16px;
@@ -119,7 +160,7 @@ code {
   align-items: center;
   min-height: 44px;
   font-size: 14px;
-  color: var(--muted);
+  color: #6b7280;
 }
 
 .status-chip {
@@ -149,6 +190,7 @@ code {
   margin: 0;
   font-size: 26px;
   font-weight: 700;
+  color: #ffffff;
 }
 
 .section-badge {
@@ -201,6 +243,7 @@ code {
   align-items: start;
   transition: 0.18s ease;
   color: #111111;
+  background: #ffffff;
 }
 
 .card:hover {
@@ -208,7 +251,7 @@ code {
 }
 
 .card.unowned {
-  opacity: 0.48;
+  opacity: 0.72;
 }
 
 .icon-wrap {
@@ -239,6 +282,7 @@ code {
   margin: 0 0 10px;
   font-size: 18px;
   line-height: 1.4;
+  color: #111111;
 }
 
 .field {
@@ -269,6 +313,7 @@ code {
   background: white;
   padding: 0 10px;
   font-size: 14px;
+  color: #111111;
 }
 
 .field select:disabled {
@@ -279,11 +324,11 @@ code {
 
 .empty {
   padding: 22px;
-  color: var(--muted);
+  color: #d1d5db;
   text-align: center;
-  border: 1px dashed var(--border);
+  border: 1px dashed #4b5563;
   border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .modal-backdrop {
@@ -317,8 +362,8 @@ code {
 
 .modal p {
   margin: 0 0 12px;
-  line-height: 1.7;
   color: #4b5563;
+  line-height: 1.7;
 }
 
 .modal .note {
@@ -332,6 +377,17 @@ code {
   background: #ffffff;
 }
 
+.modal textarea.control {
+  height: auto;
+  min-height: 110px;
+  padding: 12px;
+  resize: vertical;
+  line-height: 1.6;
+  color: #111111;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+}
+
 .modal .preview-block h3 {
   color: #111111;
 }
@@ -339,12 +395,6 @@ code {
 .modal .button.ghost {
   background: #ffffff;
   color: #111111;
-  border: 1px solid #cbd5e1;
-}
-
-.modal textarea.control {
-  color: #111111;
-  background: #ffffff;
   border: 1px solid #cbd5e1;
 }
 
@@ -395,17 +445,13 @@ code {
   color: var(--muted);
 }
 
-textarea.control {
-  height: auto;
-  min-height: 110px;
-  padding: 12px;
-  resize: vertical;
-  line-height: 1.6;
-}
-
 @media (max-width: 1100px) {
-  .toolbar-inner {
+  .toolbar-top {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .toolbar-bottom {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -418,7 +464,8 @@ textarea.control {
     font-size: 26px;
   }
 
-  .toolbar-inner {
+  .toolbar-top,
+  .toolbar-bottom {
     grid-template-columns: 1fr;
   }
 

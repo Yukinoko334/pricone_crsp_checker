@@ -1,6 +1,10 @@
 const ELEMENTS = ["火", "水", "風", "光", "闇"];
 const STORAGE_KEY = "pricone_checker_state_v1";
 const OWNER_NAME_KEY = "pricone_checker_owner_name_v1";
+const EXPORT_PAGE_GROUPS = [
+  ["火", "水"],
+  ["風", "光", "闇"],
+];
 
 let characters = [];
 let state = {};
@@ -8,8 +12,11 @@ let state = {};
 const app = document.getElementById("app");
 const searchInput = document.getElementById("searchInput");
 const ownershipFilter = document.getElementById("ownershipFilter");
-const shareBtn = document.getElementById("shareBtn");
-const exportBtn = document.getElementById("exportBtn");
+const exportMenuBtn = document.getElementById("exportMenuBtn");
+const bulkOwnedBtn = document.getElementById("bulkOwnedBtn");
+const bulkUnownedBtn = document.getElementById("bulkUnownedBtn");
+const bulkApplyBtn = document.getElementById("bulkApplyBtn");
+const backupMenuBtn = document.getElementById("backupMenuBtn");
 const resetBtn = document.getElementById("resetBtn");
 const ownedCount = document.getElementById("ownedCount");
 const crCount = document.getElementById("crCount");
@@ -33,8 +40,11 @@ async function initializeApp() {
 
     searchInput.addEventListener("input", render);
     ownershipFilter.addEventListener("change", render);
-    shareBtn.addEventListener("click", handleShareUrl);
-    exportBtn.addEventListener("click", handleExportImages);
+    exportMenuBtn.addEventListener("click", showExportMenu);
+    bulkOwnedBtn.addEventListener("click", handleBulkOwned);
+    bulkUnownedBtn.addEventListener("click", handleBulkUnowned);
+    bulkApplyBtn.addEventListener("click", showBulkApplyModal);
+    backupMenuBtn.addEventListener("click", showBackupMenu);
     resetBtn.addEventListener("click", handleReset);
     modalCloseBtn.addEventListener("click", closeModal);
     modalBackdrop.addEventListener("click", (e) => {
@@ -349,59 +359,85 @@ function handleShareUrl() {
 }
 
 async function handleExportImages() {
-  const grouped = {};
+  try {
+    const grouped = {};
 
-  for (const element of ELEMENTS) {
-    grouped[element] = characters
-      .filter((c) => c.element === element)
-      .sort((a, b) => a.sort - b.sort || a.name.localeCompare(b.name, "ja"))
-      .filter((c) => state[c.id].cr > 0);
-  }
+    for (const element of ELEMENTS) {
+      grouped[element] = characters
+        .filter((c) => c.element === element)
+        .sort((a, b) => a.sort - b.sort || a.name.localeCompare(b.name, "ja"))
+        .filter((c) => state[c.id].cr > 0);
+    }
 
-  const totalCount = Object.values(grouped).reduce((sum, list) => sum + list.length, 0);
+    const totalCount = Object.values(grouped).reduce((sum, list) => sum + list.length, 0);
 
-  const wrapper = document.createElement("div");
+    const wrapper = document.createElement("div");
 
-  if (totalCount === 0) {
-    wrapper.innerHTML = `
-      <p>現在は画像出力対象がありません。</p>
-      <div class="note">CR が 1 以上のキャラを登録すると、画像を出力できます。</div>
-    `;
+    if (totalCount === 0) {
+      wrapper.innerHTML = `
+        <p>現在は画像出力対象がありません。</p>
+        <div class="note">CR が 1 以上のキャラを登録すると、画像を出力できます。</div>
+      `;
+      showModal("画像出力", wrapper);
+      return;
+    }
+
+    const pages = [];
+
+    for (let i = 0; i < EXPORT_PAGE_GROUPS.length; i++) {
+      const pageElements = EXPORT_PAGE_GROUPS[i];
+      const pageHasAny = pageElements.some((element) => (grouped[element] || []).length > 0);
+
+      if (!pageHasAny) continue;
+
+      const url = await drawExportPageCanvas(grouped, pageElements);
+      pages.push({
+        pageNo: pages.length + 1,
+        elements: pageElements,
+        url,
+      });
+    }
+
+    const preview = document.createElement("div");
+    preview.className = "export-preview";
+
+    const images = document.createElement("div");
+    images.className = "preview-images";
+
+    for (const page of pages) {
+      const block = document.createElement("div");
+      block.className = "preview-block";
+      block.innerHTML = `
+        <h3>画像${page.pageNo} (${page.elements.join("・")}属性)</h3>
+        <img src="${page.url}" alt="画像${page.pageNo}">
+      `;
+
+      const dl = document.createElement("a");
+      dl.className = "button primary";
+      dl.textContent = `画像${page.pageNo}を保存`;
+      dl.href = page.url;
+      dl.download = `pricone_export_page${page.pageNo}.png`;
+      dl.style.display = "inline-flex";
+      dl.style.alignItems = "center";
+      dl.style.justifyContent = "center";
+      dl.style.marginTop = "10px";
+
+      block.appendChild(dl);
+      images.appendChild(block);
+    }
+
+    preview.appendChild(images);
+    wrapper.appendChild(preview);
+    wrapper.insertAdjacentHTML(
+      "beforeend",
+      `<div class="note">画像1は火・水属性、画像2は風・光・闇属性で出力されます。</div>`
+    );
+
     showModal("画像出力", wrapper);
-    return;
+  } catch (error) {
+    console.error("画像出力エラー:", error);
+    alert("画像出力でエラーが発生しました。F12 の Console を確認してください。");
   }
-
-  const url = await drawAllElementsCanvas(grouped);
-
-  const preview = document.createElement("div");
-  preview.className = "export-preview";
-
-  const block = document.createElement("div");
-  block.className = "preview-block";
-  block.innerHTML = `
-    <h3>全属性まとめ画像</h3>
-    <img src="${url}" alt="全属性まとめ画像">
-  `;
-
-  const dl = document.createElement("a");
-  dl.className = "button primary";
-  dl.textContent = `画像を保存`;
-  dl.href = url;
-  dl.download = `pricone_all_elements.png`;
-  dl.style.display = "inline-flex";
-  dl.style.alignItems = "center";
-  dl.style.justifyContent = "center";
-  dl.style.marginTop = "10px";
-
-  block.appendChild(dl);
-  preview.appendChild(block);
-  wrapper.appendChild(preview);
-  wrapper.insertAdjacentHTML(
-    "beforeend",
-    `<div class="note">全属性を1枚にまとめたDiscord共有向けPNG画像です。</div>`
-  );
-
-  showModal("画像出力", wrapper);
 }
 
 
@@ -482,20 +518,24 @@ function drawRoundedImageOrPlaceholder(ctx, img, char, x, y, w, h) {
 
 function drawCrBadge(ctx, rightX, bottomY, value) {
   const text = String(value);
-  ctx.font = "bold 20px 'Segoe UI', sans-serif";
+
+  ctx.font = "bold 16px 'Segoe UI', sans-serif";
   const textWidth = ctx.measureText(text).width;
-  const badgeW = Math.max(34, textWidth + 18);
-  const badgeH = 30;
+
+  const badgeW = Math.max(24, textWidth + 12);
+  const badgeH = 22;
+
   const x = rightX - badgeW;
   const y = bottomY - badgeH;
 
   ctx.fillStyle = "rgba(17, 24, 39, 0.92)";
-  roundRect(ctx, x, y, badgeW, badgeH, 14, true, false);
+  roundRect(ctx, x, y, badgeW, badgeH, 10, true, false);
 
   ctx.fillStyle = "#ffffff";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  ctx.fillText(text, x + badgeW / 2, y + badgeH / 2 + 1);
+  ctx.fillText(text, x + badgeW / 2, y + badgeH / 2 + 0.5);
+
   ctx.textAlign = "start";
   ctx.textBaseline = "alphabetic";
 }
@@ -622,78 +662,57 @@ function fitText(ctx, text, maxWidth) {
   return "…";
 }
 
-async function drawAllElementsCanvas(grouped) {
-  const cols = 5;
-  const iconSize = 72;
-  const cellW = 110;
-  const cellH = 110;
-
+async function drawExportPageCanvas(grouped, pageElements) {
+  const pagePaddingX = 28;
+  const pagePaddingTop = 24;
+  const pagePaddingBottom = 28;
   const headerH = 96;
-  const sectionTitleH = 44;
-  const sectionTopPad = 18;
-  const sectionBottomPad = 16;
-  const sectionGap = 10;
 
-  const paddingX = 32;
-  const paddingTop = 24;
-  const paddingBottom = 32;
+  const blockGapX = 20;
+  const blockGapY = 18;
+  const blockWidth = 360;
 
-  const width = paddingX * 2 + cols * cellW;
+  const rows = buildRowsForPage(pageElements);
 
-  let totalHeight = paddingTop + headerH + paddingBottom;
+  const blockHeights = rows.map(([left, right]) => {
+    const leftHeight = left ? getElementBlockHeight(grouped[left] || []) : 0;
+    const rightHeight = right ? getElementBlockHeight(grouped[right] || []) : 0;
+    return Math.max(leftHeight, rightHeight);
+  });
 
-  for (const element of ELEMENTS) {
-    const list = grouped[element] || [];
-    if (list.length === 0) continue;
-
-    const rows = Math.ceil(list.length / cols);
-    totalHeight += sectionTopPad + sectionTitleH + rows * cellH + sectionBottomPad + sectionGap;
-  }
+  const width = pagePaddingX * 2 + blockWidth * 2 + blockGapX;
+  const totalBlocksHeight =
+    blockHeights.reduce((sum, h) => sum + h, 0) + blockGapY * Math.max(0, rows.length - 1);
+  const height = pagePaddingTop + headerH + 20 + totalBlocksHeight + pagePaddingBottom;
 
   const canvas = document.createElement("canvas");
   canvas.width = width;
-  canvas.height = totalHeight;
+  canvas.height = height;
   const ctx = canvas.getContext("2d");
 
   ctx.fillStyle = "#f9fafb";
-  ctx.fillRect(0, 0, width, totalHeight);
+  ctx.fillRect(0, 0, width, height);
 
-  drawExportHeader(ctx, width, paddingX, paddingTop, headerH);
+  drawExportHeader(ctx, width, pagePaddingX, pagePaddingTop, headerH);
 
-  let currentY = paddingTop + headerH;
+  let currentY = pagePaddingTop + headerH + 20;
 
-  for (const element of ELEMENTS) {
-    const list = grouped[element] || [];
-    if (list.length === 0) continue;
+  for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+    const [leftElement, rightElement] = rows[rowIndex];
+    const rowHeight = blockHeights[rowIndex];
 
-    const rows = Math.ceil(list.length / cols);
+    const leftX = pagePaddingX;
+    const rightX = pagePaddingX + blockWidth + blockGapX;
 
-    currentY += sectionTopPad;
+    if (leftElement) {
+      await drawElementBlock(ctx, leftElement, grouped[leftElement] || [], leftX, currentY, blockWidth);
+    }
 
-    drawSectionHeader(ctx, element, paddingX, currentY, width - paddingX * 2);
-    currentY += sectionTitleH;
+    if (rightElement) {
+      await drawElementBlock(ctx, rightElement, grouped[rightElement] || [], rightX, currentY, blockWidth);
+    }
 
-    const images = await Promise.all(list.map(loadIconImage));
-
-    images.forEach((img, index) => {
-      const char = list[index];
-      const s = state[char.id];
-
-      const col = index % cols;
-      const row = Math.floor(index / cols);
-
-      const x = paddingX + col * cellW + (cellW - iconSize) / 2;
-      const y = currentY + row * cellH + 6;
-
-      drawRoundedImageOrPlaceholder(ctx, img, char, x, y, iconSize, iconSize);
-      drawCrBadge(ctx, x + iconSize - 4, y + iconSize - 4, s.cr);
-
-      if (s.sp === 1) {
-        drawSpBadge(ctx, x + iconSize - 2, y + 2);
-      }
-    });
-
-    currentY += rows * cellH + sectionBottomPad + sectionGap;
+    currentY += rowHeight + blockGapY;
   }
 
   return canvas.toDataURL("image/png");
@@ -837,6 +856,313 @@ function drawExportHeader(ctx, canvasWidth, paddingX, topY, headerH) {
 
   ctx.textAlign = "start";
   ctx.textBaseline = "alphabetic";
+}
+
+function showExportMenu() {
+  const wrapper = document.createElement("div");
+  wrapper.innerHTML = `<p>外部出力の方法を選択してください。</p>`;
+
+  const urlBtn = document.createElement("button");
+  urlBtn.className = "button";
+  urlBtn.textContent = "共有URL生成";
+  urlBtn.addEventListener("click", () => {
+    closeModal();
+    handleShareUrl();
+  });
+
+  const imageBtn = document.createElement("button");
+  imageBtn.className = "button primary";
+  imageBtn.textContent = "画像出力";
+  imageBtn.addEventListener("click", () => {
+    closeModal();
+    handleExportImages();
+  });
+
+  showModal("外部出力", wrapper, [imageBtn, urlBtn]);
+}
+
+function handleBulkOwned() {
+  const ok = confirm("全キャラを所持状態にします。よろしいですか？");
+  if (!ok) return;
+
+  for (const char of characters) {
+    state[char.id] = {
+      owned: true,
+      cr: state[char.id]?.cr ?? 0,
+      sp: state[char.id]?.sp ?? 0,
+    };
+  }
+
+  saveState();
+  render();
+}
+
+function handleBulkUnowned() {
+  const ok = confirm("全キャラを未所持状態にします。よろしいですか？");
+  if (!ok) return;
+
+  for (const char of characters) {
+    state[char.id] = {
+      owned: false,
+      cr: 0,
+      sp: 0,
+    };
+  }
+
+  saveState();
+  render();
+}
+
+function showBulkApplyModal() {
+  const wrapper = document.createElement("div");
+  wrapper.innerHTML = `
+    <p>所持中キャラに対して一括設定を適用します。</p>
+    <div style="display:grid; gap:12px; margin-top:12px;">
+      <label>
+        CR
+        <select id="bulkCrSelect" class="control" style="width:100%; margin-top:6px;">
+          ${Array.from({ length: 16 }, (_, i) => `<option value="${i}">${i}</option>`).join("")}
+        </select>
+      </label>
+      <label>
+        専用SP
+        <select id="bulkSpSelect" class="control" style="width:100%; margin-top:6px;">
+          <option value="0">なし</option>
+          <option value="1">あり</option>
+        </select>
+      </label>
+    </div>
+  `;
+
+  const applyBtn = document.createElement("button");
+  applyBtn.className = "button primary";
+  applyBtn.textContent = "適用";
+  applyBtn.addEventListener("click", () => {
+    const cr = Number(document.getElementById("bulkCrSelect").value);
+    const sp = Number(document.getElementById("bulkSpSelect").value);
+
+    for (const char of characters) {
+      if (!state[char.id]?.owned) continue;
+      state[char.id].cr = cr;
+      state[char.id].sp = sp;
+    }
+
+    saveState();
+    closeModal();
+    render();
+  });
+
+  showModal("一括設定", wrapper, [applyBtn]);
+}
+
+function showBackupMenu() {
+  const wrapper = document.createElement("div");
+  wrapper.innerHTML = `<p>バックアップの方法を選択してください。</p>`;
+
+  const saveBtn = document.createElement("button");
+  saveBtn.className = "button primary";
+  saveBtn.textContent = "バックアップ保存";
+  saveBtn.addEventListener("click", () => {
+    closeModal();
+    handleBackupExport();
+  });
+
+  const loadBtn = document.createElement("button");
+  loadBtn.className = "button";
+  loadBtn.textContent = "バックアップ読込";
+  loadBtn.addEventListener("click", () => {
+    closeModal();
+    handleBackupImport();
+  });
+
+  showModal("バックアップ", wrapper, [saveBtn, loadBtn]);
+}
+
+function handleBackupExport() {
+  const backupData = {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    ownerName: ownerNameInput ? ownerNameInput.value.trim() : "",
+    state: state,
+  };
+
+  const json = JSON.stringify(backupData, null, 2);
+  const blob = new Blob([json], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, "0");
+  const d = String(now.getDate()).padStart(2, "0");
+  const hh = String(now.getHours()).padStart(2, "0");
+  const mm = String(now.getMinutes()).padStart(2, "0");
+
+  const owner = (ownerNameInput?.value.trim() || "player").replace(/[\\\\/:*?\"<>|]/g, "_");
+  const fileName = `pricone_backup_${owner}_${y}${m}${d}_${hh}${mm}.json`;
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+
+  URL.revokeObjectURL(url);
+}
+
+function handleBackupImport() {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = ".json,application/json";
+
+  input.addEventListener("change", async () => {
+    const file = input.files?.[0];
+    if (!file) return;
+
+    try {
+      const text = await file.text();
+      const parsed = JSON.parse(text);
+
+      if (!parsed || typeof parsed !== "object") {
+        throw new Error("JSON形式が不正です。");
+      }
+
+      if (!parsed.state || typeof parsed.state !== "object") {
+        throw new Error("バックアップ内に state がありません。");
+      }
+
+      const normalized = normalizeState(parsed.state);
+      state = normalized;
+      saveState();
+
+      if (typeof parsed.ownerName === "string" && ownerNameInput) {
+        ownerNameInput.value = parsed.ownerName;
+        saveOwnerName();
+      }
+
+      render();
+      alert("バックアップを読み込みました。");
+    } catch (error) {
+      console.error("バックアップ読込エラー:", error);
+      alert("バックアップ読込に失敗しました。JSONファイルの内容を確認してください。");
+    }
+  });
+
+  input.click();
+}
+
+function getElementBlockHeight(list) {
+  const sectionTitleH = 42;
+  const sectionInnerTop = 12;
+  const sectionInnerBottom = 14;
+  const iconAreaTop = 6;
+  const cols = 5;
+  const cellW = 64;
+  const cellH = 92;
+
+  const count = list.length;
+  const rows = Math.max(1, Math.ceil(count / cols));
+
+  return sectionTitleH + sectionInnerTop + iconAreaTop + rows * cellH + sectionInnerBottom;
+}
+
+async function drawElementBlock(ctx, element, list, x, y, blockWidth) {
+  const sectionTitleH = 42;
+  const sectionInnerTop = 12;
+  const sectionInnerBottom = 14;
+  const iconAreaTop = 6;
+
+  const cols = 5;
+  const iconSize = 56;
+  const cellW = 64;
+  const cellH = 92;
+
+  const rows = Math.max(1, Math.ceil(list.length / cols));
+  const blockHeight = getElementBlockHeight(list);
+
+  ctx.fillStyle = "#ffffff";
+  roundRect(ctx, x, y, blockWidth, blockHeight, 16, true, false);
+
+  ctx.strokeStyle = "#e5e7eb";
+  ctx.lineWidth = 1;
+  roundRect(ctx, x, y, blockWidth, blockHeight, 16, false, true);
+
+  drawSectionHeaderInBlock(ctx, element, x + 14, y + 10, blockWidth - 28);
+
+  if (list.length === 0) {
+    ctx.fillStyle = "#9ca3af";
+    ctx.font = "14px 'Segoe UI', sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("該当キャラなし", x + blockWidth / 2, y + 68);
+    ctx.textAlign = "start";
+    ctx.textBaseline = "alphabetic";
+    return;
+  }
+
+  const images = await Promise.all(list.map(loadIconImage));
+
+  const gridStartX = x + 18;
+  const gridStartY = y + sectionTitleH + sectionInnerTop + iconAreaTop;
+
+  images.forEach((img, index) => {
+    const char = list[index];
+    const s = state[char.id];
+
+    const col = index % cols;
+    const row = Math.floor(index / cols);
+
+    const drawX = gridStartX + col * cellW;
+    const drawY = gridStartY + row * cellH;
+
+    drawRoundedImageOrPlaceholder(ctx, img, char, drawX, drawY, iconSize, iconSize);
+    drawCrBadge(ctx, drawX + iconSize - 1, drawY + iconSize - 1, s.cr);
+
+    if (s.sp === 1) {
+      drawSpBadge(ctx, drawX + iconSize - 2, drawY + 2);
+    }
+  });
+}
+
+function drawSectionHeaderInBlock(ctx, element, x, y, width) {
+  const colorMap = {
+    "火": "#ef4444",
+    "水": "#3b82f6",
+    "風": "#10b981",
+    "光": "#eab308",
+    "闇": "#8b5cf6",
+  };
+
+  const color = colorMap[element] || "#6b7280";
+
+  ctx.fillStyle = color;
+  roundRect(ctx, x, y, 74, 28, 14, true, false);
+
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "bold 16px 'Segoe UI', sans-serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(`${element}属性`, x + 37, y + 14);
+
+  ctx.textAlign = "start";
+  ctx.textBaseline = "alphabetic";
+
+  ctx.strokeStyle = "#e5e7eb";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(x + 88, y + 14);
+  ctx.lineTo(x + width, y + 14);
+  ctx.stroke();
+}
+
+function buildRowsForPage(pageElements) {
+  const rows = [];
+
+  for (let i = 0; i < pageElements.length; i += 2) {
+    rows.push([pageElements[i] || null, pageElements[i + 1] || null]);
+  }
+
+  return rows;
 }
 
 initializeApp();
