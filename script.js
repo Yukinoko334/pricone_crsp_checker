@@ -787,22 +787,6 @@ function saveOwnerName() {
   }
 }
 
-function loadOwnerName() {
-  try {
-    return localStorage.getItem(OWNER_NAME_KEY) ?? "";
-  } catch {
-    return "";
-  }
-}
-
-function saveOwnerName() {
-  try {
-    localStorage.setItem(OWNER_NAME_KEY, ownerNameInput.value.trim());
-  } catch {
-    // 何もしない
-  }
-}
-
 function getTodayString() {
   const now = new Date();
   const y = now.getFullYear();

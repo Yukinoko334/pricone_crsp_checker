@@ -229,10 +229,12 @@ code {
   font-size: 15px;
 }
 
+/* ===== 一覧 ===== */
 .cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 14px;
+  align-items: start;
 }
 
 .card {
@@ -244,6 +246,7 @@ code {
   transition: 0.18s ease;
   color: #111111;
   background: #ffffff;
+  min-width: 0;
 }
 
 .card:hover {
@@ -269,6 +272,7 @@ code {
   font-size: 12px;
   text-align: center;
   line-height: 1.4;
+  flex-shrink: 0;
 }
 
 .icon-wrap img {
@@ -283,6 +287,8 @@ code {
   font-size: 18px;
   line-height: 1.4;
   color: #111111;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .field {
@@ -292,6 +298,7 @@ code {
   align-items: center;
   margin-top: 8px;
   font-size: 14px;
+  min-width: 0;
 }
 
 .field label {
@@ -314,6 +321,7 @@ code {
   padding: 0 10px;
   font-size: 14px;
   color: #111111;
+  min-width: 0;
 }
 
 .field select:disabled {
@@ -445,6 +453,7 @@ code {
   color: var(--muted);
 }
 
+/* ===== タブレット以下 ===== */
 @media (max-width: 1100px) {
   .toolbar-top {
     grid-template-columns: 1fr 1fr;
@@ -455,6 +464,7 @@ code {
   }
 }
 
+/* ===== スマホ最適化 ===== */
 @media (max-width: 720px) {
   .container {
     padding: 16px;
@@ -462,6 +472,10 @@ code {
 
   .page-title {
     font-size: 26px;
+  }
+
+  .toolbar {
+    padding: 10px 0 14px;
   }
 
   .toolbar-top,
@@ -478,15 +492,69 @@ code {
     align-items: flex-start;
   }
 
-  .cards {
-    grid-template-columns: 1fr;
+  .section-title {
+    font-size: 22px;
   }
 
+  .section-meta {
+    font-size: 14px;
+  }
+
+  /* スマホでは2列 */
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  /* カード内部は縦積み */
   .card {
-    grid-template-columns: 72px 1fr;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .icon-wrap {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+  }
+
+  .char-name {
+    margin: 0 0 8px;
+    font-size: 15px;
+    line-height: 1.35;
+  }
+
+  .field {
+    grid-template-columns: 56px 1fr;
+    gap: 8px;
+    margin-top: 6px;
+    font-size: 13px;
+  }
+
+  .field label {
+    font-size: 13px;
+  }
+
+  .field select {
+    height: 34px;
+    padding: 0 8px;
+    font-size: 13px;
+  }
+
+  .owned-check {
+    width: 20px;
+    height: 20px;
   }
 
   .modal {
     padding: 16px;
+  }
+}
+
+/* 極端に狭い端末では1列 */
+@media (max-width: 380px) {
+  .cards {
+    grid-template-columns: 1fr;
   }
 }
