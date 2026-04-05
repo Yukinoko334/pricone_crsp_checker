@@ -133,30 +133,86 @@ function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
-function initializeFromUrl() {
-  const params = new URLSearchParams(location.search);
-  const data = params.get("data");
-  if (!data) return;
+function encodeShareDataCompactV2() {
+  const raw = characters.map((char) => {
+    const s = state[char.id];
 
-  try {
-    const decoded = decodeURIComponent(escape(atob(data)));
-    const parsed = JSON.parse(decoded);
-    const fresh = createDefaultState();
+    const ownedCrValue = s.owned ? (Number(s.cr ?? 0) + 1) : 0;
+    const ownedCrChar = ownedCrValue.toString(36);
+    const spChar = Number(s.sp ?? 0).toString(36);
 
-    for (const [charId, values] of Object.entries(parsed)) {
-      if (!fresh[charId]) continue;
+    return `${ownedCrChar}${spChar}`;
+  }).join("");
 
-      const cr = Array.isArray(values) ? Number(values[0] ?? 0) : 0;
-      const sp = Array.isArray(values) ? Number(values[1] ?? 0) : 0;
+  return LZString.compressToEncodedURIComponent(raw);
+}
 
-      fresh[charId] = {
-        owned: true,
-        cr: Number.isInteger(cr) ? Math.max(0, Math.min(15, cr)) : 0,
-        sp: sp === 1 ? 1 : 0,
+function decodeShareDataCompactV2(encoded) {
+  const raw = LZString.decompressFromEncodedURIComponent(encoded);
+  if (!raw) {
+    throw new Error("圧縮データの復元に失敗しました");
+  }
+
+  const fresh = createDefaultState();
+
+  characters.forEach((char, index) => {
+    const pos = index * 2;
+    const ownedCrChar = raw[pos] ?? "0";
+    const spChar = raw[pos + 1] ?? "0";
+
+    const ownedCrValue = parseInt(ownedCrChar, 36);
+    const sp = parseInt(spChar, 36);
+
+    if (ownedCrValue === 0 || Number.isNaN(ownedCrValue)) {
+      fresh[char.id] = {
+        owned: false,
+        cr: 0,
+        sp: 0,
       };
+      return;
     }
 
-    state = fresh;
+    fresh[char.id] = {
+      owned: true,
+      cr: ownedCrValue - 1,
+      sp: sp === 1 ? 1 : 0,
+    };
+  });
+
+  return fresh;
+}
+
+function initializeFromUrl() {
+  const params = new URLSearchParams(location.search);
+  const compressed = params.get("z");
+  const legacy = params.get("data");
+
+  if (!compressed && !legacy) return;
+
+  try {
+    if (compressed) {
+      state = decodeShareDataCompactV2(compressed);
+    } else {
+      const decoded = decodeURIComponent(escape(atob(legacy)));
+      const parsed = JSON.parse(decoded);
+      const fresh = createDefaultState();
+
+      for (const [charId, values] of Object.entries(parsed)) {
+        if (!fresh[charId]) continue;
+
+        const cr = Array.isArray(values) ? Number(values[0] ?? 0) : 0;
+        const sp = Array.isArray(values) ? Number(values[1] ?? 0) : 0;
+
+        fresh[charId] = {
+          owned: true,
+          cr: Number.isInteger(cr) ? Math.max(0, Math.min(35, cr)) : 0,
+          sp: sp === 1 ? 1 : 0,
+        };
+      }
+
+      state = fresh;
+    }
+
     saveState();
   } catch (error) {
     console.warn("共有URLの復元に失敗しました", error);
@@ -351,19 +407,12 @@ function getSummaryCounts() {
 }
 
 function handleShareUrl() {
-  const compact = {};
-  for (const [charId, row] of Object.entries(state)) {
-    if (!row.owned) continue;
-    compact[charId] = [row.cr, row.sp];
-  }
-
-  const json = JSON.stringify(compact);
-  const encoded = btoa(unescape(encodeURIComponent(json)));
-  const url = `${location.origin}${location.pathname}?data=${encoded}`;
+  const encoded = encodeShareDataCompactV2();
+  const url = `${location.origin}${location.pathname}?z=${encoded}`;
 
   const wrapper = document.createElement("div");
   wrapper.innerHTML = `
-    <p>所持キャラのみを軽量化した共有URLです。</p>
+    <p>圧縮共有URLです。</p>
     <textarea class="control" style="width:100%; height:110px; padding:12px; resize:vertical;">${url}</textarea>
     <div class="note">URLに含まれないキャラは未所持として復元されます。</div>
   `;
@@ -390,8 +439,12 @@ async function handleExportImages() {
     for (const element of ELEMENTS) {
       grouped[element] = characters
         .filter((c) => c.element === element)
-        .sort((a, b) => a.sort - b.sort || a.name.localeCompare(b.name, "ja"))
-        .filter((c) => state[c.id].cr > 0);
+        .filter((c) => state[c.id].cr > 0)
+        .sort((a, b) =>
+          state[b.id].cr - state[a.id].cr ||
+          a.sort - b.sort ||
+          a.name.localeCompare(b.name, "ja")
+        );
     }
 
     const totalCount = Object.values(grouped).reduce((sum, list) => sum + list.length, 0);
@@ -551,8 +604,12 @@ async function handleExportOwnedImages() {
     for (const element of ELEMENTS) {
       grouped[element] = characters
         .filter((c) => c.element === element)
-        .sort((a, b) => a.sort - b.sort || a.name.localeCompare(b.name, "ja"))
-        .filter((c) => state[c.id].owned);
+        .filter((c) => state[c.id].owned)
+        .sort((a, b) =>
+          state[b.id].cr - state[a.id].cr ||
+          a.sort - b.sort ||
+          a.name.localeCompare(b.name, "ja")
+        );
     }
 
     const totalCount = Object.values(grouped).reduce((sum, list) => sum + list.length, 0);
