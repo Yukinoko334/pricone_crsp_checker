@@ -310,7 +310,7 @@
   {
     "id": "0045",
     "name": "ヴァイオレット(イサナミ)",
-    "element": "風",
+    "element": "水",
     "sort": 1,
     "icon": "images/vaioret_i.png"
   },
@@ -788,7 +788,7 @@
     "name": "コッコロ(プリンセス)",
     "element": "風",
     "sort": 1,
-    "icon": "images/kuroche_e.png"
+    "icon": "images/kokoro_p.png"
   },
   {
     "id": "0114",
@@ -1423,9 +1423,9 @@
   {
     "id": "0204",
     "name": "ヒヨリ(プリンセス)",
-    "element": "闇",
+    "element": "火",
     "sort": 1,
-    "icon": "images/bikara.png"
+    "icon": "images/hiyori_p.png"
   },
   {
     "id": "0205",
