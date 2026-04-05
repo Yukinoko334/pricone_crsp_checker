@@ -38,7 +38,18 @@
         </select>
       </div>
 
-      <div class="toolbar-bottom">
+      <button
+        id="toolbarToggleBtn"
+        class="button panel toolbar-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="toolbarBottom"
+      >
+        操作メニューを開く
+      </button>
+
+
+      <div id="toolbarBottom" class="toolbar-bottom is-collapsed">
         <button id="bulkOwnedBtn" class="button panel">全所持ON</button>
         <button id="bulkUnownedBtn" class="button panel">全所持OFF</button>
         <button id="bulkApplyBtn" class="button panel">一括設定</button>

@@ -21,6 +21,8 @@ const resetBtn = document.getElementById("resetBtn");
 const ownedCount = document.getElementById("ownedCount");
 const crCount = document.getElementById("crCount");
 const spCount = document.getElementById("spCount");
+const toolbarToggleBtn = document.getElementById("toolbarToggleBtn");
+const toolbarBottom = document.getElementById("toolbarBottom");
 
 const modalBackdrop = document.getElementById("modalBackdrop");
 const modalTitle = document.getElementById("modalTitle");
@@ -46,10 +48,15 @@ async function initializeApp() {
     bulkApplyBtn.addEventListener("click", showBulkApplyModal);
     backupMenuBtn.addEventListener("click", showBackupMenu);
     resetBtn.addEventListener("click", handleReset);
+    toolbarToggleBtn.addEventListener("click", toggleToolbarMenu);
     modalCloseBtn.addEventListener("click", closeModal);
     modalBackdrop.addEventListener("click", (e) => {
       if (e.target === modalBackdrop) closeModal();
     });
+
+    syncToolbarMenuForViewport();
+    window.addEventListener("resize", syncToolbarMenuForViewport);
+
   } catch (error) {
     console.error(error);
     app.innerHTML = `
@@ -1147,6 +1154,31 @@ function buildRowsForPage(pageElements) {
   }
 
   return rows;
+}
+
+function toggleToolbarMenu() {
+  const isCollapsed = toolbarBottom.classList.contains("is-collapsed");
+
+  if (isCollapsed) {
+    toolbarBottom.classList.remove("is-collapsed");
+    toolbarToggleBtn.textContent = "操作メニューを閉じる";
+    toolbarToggleBtn.setAttribute("aria-expanded", "true");
+  } else {
+    toolbarBottom.classList.add("is-collapsed");
+    toolbarToggleBtn.textContent = "操作メニューを開く";
+    toolbarToggleBtn.setAttribute("aria-expanded", "false");
+  }
+}
+
+function syncToolbarMenuForViewport() {
+  if (window.innerWidth > 720) {
+    toolbarBottom.classList.remove("is-collapsed");
+    toolbarToggleBtn.setAttribute("aria-expanded", "true");
+  } else {
+    toolbarBottom.classList.add("is-collapsed");
+    toolbarToggleBtn.textContent = "操作メニューを開く";
+    toolbarToggleBtn.setAttribute("aria-expanded", "false");
+  }
 }
 
 initializeApp();

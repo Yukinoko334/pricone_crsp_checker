@@ -453,6 +453,15 @@ code {
   color: var(--muted);
 }
 
+.toolbar-toggle {
+  display: none;
+  width: 100%;
+}
+
+.toolbar-bottom.is-collapsed {
+  display: none;
+}
+
 /* ===== タブレット以下 ===== */
 @media (max-width: 1100px) {
   .toolbar-top {
@@ -474,13 +483,36 @@ code {
     font-size: 26px;
   }
 
+  .page-desc {
+    display: none;
+  }
+
   .toolbar {
     padding: 10px 0 14px;
   }
 
-  .toolbar-top,
-  .toolbar-bottom {
+  .toolbar-top {
     grid-template-columns: 1fr;
+  }
+
+  .toolbar-toggle {
+    display: block;
+    margin-bottom: 10px;
+    height: 40px;
+    font-size: 13px;
+    padding: 0 12px;
+  }
+
+  .toolbar-bottom {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .control,
+  .button {
+    height: 40px;
+    font-size: 13px;
+    padding: 0 12px;
   }
 
   .status-bar {
@@ -500,13 +532,11 @@ code {
     font-size: 14px;
   }
 
-  /* スマホでは2列 */
   .cards {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
   }
 
-  /* カード内部は縦積み */
   .card {
     grid-template-columns: 1fr;
     gap: 10px;
@@ -549,6 +579,16 @@ code {
 
   .modal {
     padding: 16px;
+  }
+}
+
+@media (min-width: 721px) {
+  .toolbar-bottom {
+    display: grid !important;
+  }
+
+  .toolbar-toggle {
+    display: none !important;
   }
 }
 
