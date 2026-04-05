@@ -12,6 +12,8 @@ let state = {};
 const app = document.getElementById("app");
 const searchInput = document.getElementById("searchInput");
 const ownershipFilter = document.getElementById("ownershipFilter");
+const crRangeFilter = document.getElementById("crRangeFilter");
+const spFilter = document.getElementById("spFilter");
 const exportMenuBtn = document.getElementById("exportMenuBtn");
 const bulkOwnedBtn = document.getElementById("bulkOwnedBtn");
 const bulkUnownedBtn = document.getElementById("bulkUnownedBtn");
@@ -23,7 +25,6 @@ const crCount = document.getElementById("crCount");
 const spCount = document.getElementById("spCount");
 const toolbarToggleBtn = document.getElementById("toolbarToggleBtn");
 const toolbarBottom = document.getElementById("toolbarBottom");
-
 const modalBackdrop = document.getElementById("modalBackdrop");
 const modalTitle = document.getElementById("modalTitle");
 const modalBody = document.getElementById("modalBody");
@@ -42,6 +43,8 @@ async function initializeApp() {
 
     searchInput.addEventListener("input", render);
     ownershipFilter.addEventListener("change", render);
+    crRangeFilter.addEventListener("change", render);
+    spFilter.addEventListener("change", render);
     exportMenuBtn.addEventListener("click", showExportMenu);
     bulkOwnedBtn.addEventListener("click", handleBulkOwned);
     bulkUnownedBtn.addEventListener("click", handleBulkUnowned);
@@ -167,14 +170,33 @@ function initializeFromUrl() {
 function getVisibleCharacters() {
   const keyword = searchInput.value.trim().toLowerCase();
   const ownership = ownershipFilter.value;
+  const crRange = crRangeFilter.value;
+  const sp = spFilter.value;
 
   return characters.filter((char) => {
     const s = state[char.id];
+
     const nameMatch = !keyword || char.name.toLowerCase().includes(keyword);
     if (!nameMatch) return false;
 
     if (ownership === "owned" && !s.owned) return false;
     if (ownership === "unowned" && s.owned) return false;
+
+    if (crRange !== "all") {
+      const cr = Number(s.cr ?? 0);
+
+      if (crRange === "0") {
+        if (cr !== 0) return false;
+      } else {
+        const [min, max] = crRange.split("-").map(Number);
+        if (cr < min || cr > max) return false;
+      }
+    }
+
+    if (sp !== "all") {
+      const spValue = Number(s.sp ?? 0);
+      if (spValue !== Number(sp)) return false;
+    }
 
     return true;
   });
@@ -663,6 +685,8 @@ function handleReset() {
   saveState();
   searchInput.value = "";
   ownershipFilter.value = "all";
+  crRangeFilter.value = "all";
+  spFilter.value = "all";
   render();
 }
 
@@ -1280,6 +1304,20 @@ function handleBackupImport() {
   });
 
   input.click();
+}
+
+function getElementBlockHeight(list) {
+  const sectionTitleH = 42;
+  const sectionInnerTop = 12;
+  const sectionInnerBottom = 14;
+  const iconAreaTop = 6;
+  const cols = 5;
+  const cellH = 92;
+
+  const count = list.length;
+  const rows = Math.max(1, Math.ceil(count / cols));
+
+  return sectionTitleH + sectionInnerTop + iconAreaTop + rows * cellH + sectionInnerBottom;
 }
 
 function getUnownedElementBlockHeight(list) {
