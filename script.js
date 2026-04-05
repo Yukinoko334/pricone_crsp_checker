@@ -1,10 +1,6 @@
 const ELEMENTS = ["火", "水", "風", "光", "闇"];
 const STORAGE_KEY = "pricone_checker_state_v1";
 const OWNER_NAME_KEY = "pricone_checker_owner_name_v1";
-const EXPORT_PAGE_GROUPS = [
-  ["火", "水"],
-  ["風", "光", "闇"],
-];
 
 let characters = [];
 let state = {};
@@ -399,7 +395,6 @@ async function handleExportImages() {
     }
 
     const totalCount = Object.values(grouped).reduce((sum, list) => sum + list.length, 0);
-
     const wrapper = document.createElement("div");
 
     if (totalCount === 0) {
@@ -407,16 +402,15 @@ async function handleExportImages() {
         <p>現在は画像出力対象がありません。</p>
         <div class="note">CR が 1 以上のキャラを登録すると、画像を出力できます。</div>
       `;
-      showModal("画像出力", wrapper);
+      showModal("CR&専用SP画像出力", wrapper);
       return;
     }
 
+    const pageGroups = buildExportPageGroups(ELEMENTS, 2);
     const pages = [];
 
-    for (let i = 0; i < EXPORT_PAGE_GROUPS.length; i++) {
-      const pageElements = EXPORT_PAGE_GROUPS[i];
+    for (const pageElements of pageGroups) {
       const pageHasAny = pageElements.some((element) => (grouped[element] || []).length > 0);
-
       if (!pageHasAny) continue;
 
       const url = await drawExportPageCanvas(grouped, pageElements);
@@ -427,8 +421,8 @@ async function handleExportImages() {
       });
     }
 
-    const preview = document.createElement("div");
-    preview.className = "export-preview";
+    const wrapperPreview = document.createElement("div");
+    wrapperPreview.className = "export-preview";
 
     const images = document.createElement("div");
     images.className = "preview-images";
@@ -455,14 +449,14 @@ async function handleExportImages() {
       images.appendChild(block);
     }
 
-    preview.appendChild(images);
-    wrapper.appendChild(preview);
+    wrapperPreview.appendChild(images);
+    wrapper.appendChild(wrapperPreview);
     wrapper.insertAdjacentHTML(
       "beforeend",
-      `<div class="note">画像1は火・水属性、画像2は風・光・闇属性で出力されます。</div>`
+      `<div class="note">CR 1 以上のキャラを属性ごとに画像出力しています。</div>`
     );
 
-    showModal("画像出力", wrapper);
+    showModal("CR&専用SP画像出力", wrapper);
   } catch (error) {
     console.error("画像出力エラー:", error);
     alert("画像出力でエラーが発生しました。F12 の Console を確認してください。");
@@ -489,16 +483,15 @@ async function handleExportUnownedImages() {
         <p>現在は未所持キャラがいません。</p>
         <div class="note">すべてのキャラが所持済みです。</div>
       `;
-      showModal("未所持画像出力", wrapper);
+      showModal("未所持キャラ画像出力", wrapper);
       return;
     }
 
+    const pageGroups = buildExportPageGroups(ELEMENTS, 2);
     const pages = [];
 
-    for (let i = 0; i < EXPORT_PAGE_GROUPS.length; i++) {
-      const pageElements = EXPORT_PAGE_GROUPS[i];
+    for (const pageElements of pageGroups) {
       const pageHasAny = pageElements.some((element) => (grouped[element] || []).length > 0);
-
       if (!pageHasAny) continue;
 
       const url = await drawUnownedExportPageCanvas(grouped, pageElements);
@@ -519,13 +512,13 @@ async function handleExportUnownedImages() {
       const block = document.createElement("div");
       block.className = "preview-block";
       block.innerHTML = `
-        <h3>未所持画像${page.pageNo} (${page.elements.join("・")}属性)</h3>
-        <img src="${page.url}" alt="未所持画像${page.pageNo}">
+        <h3>未所持キャラ画像${page.pageNo} (${page.elements.join("・")}属性)</h3>
+        <img src="${page.url}" alt="未所持キャラ画像${page.pageNo}">
       `;
 
       const dl = document.createElement("a");
       dl.className = "button primary";
-      dl.textContent = `未所持画像${page.pageNo}を保存`;
+      dl.textContent = `未所持キャラ画像${page.pageNo}を保存`;
       dl.href = page.url;
       dl.download = `pricone_unowned_page${page.pageNo}.png`;
       dl.style.display = "inline-flex";
@@ -544,10 +537,90 @@ async function handleExportUnownedImages() {
       `<div class="note">未所持キャラのみを属性ごとに画像出力しています。</div>`
     );
 
-    showModal("未所持画像出力", wrapper);
+    showModal("未所持キャラ画像出力", wrapper);
   } catch (error) {
     console.error("未所持画像出力エラー:", error);
-    alert("未所持画像出力でエラーが発生しました。F12 の Console を確認してください。");
+    alert("未所持キャラ画像出力でエラーが発生しました。F12 の Console を確認してください。");
+  }
+}
+
+async function handleExportOwnedImages() {
+  try {
+    const grouped = {};
+
+    for (const element of ELEMENTS) {
+      grouped[element] = characters
+        .filter((c) => c.element === element)
+        .sort((a, b) => a.sort - b.sort || a.name.localeCompare(b.name, "ja"))
+        .filter((c) => state[c.id].owned);
+    }
+
+    const totalCount = Object.values(grouped).reduce((sum, list) => sum + list.length, 0);
+    const wrapper = document.createElement("div");
+
+    if (totalCount === 0) {
+      wrapper.innerHTML = `
+        <p>現在は所持キャラがありません。</p>
+        <div class="note">所持チェックがONのキャラを登録すると、画像を出力できます。</div>
+      `;
+      showModal("所持キャラ画像出力", wrapper);
+      return;
+    }
+
+    const pageGroups = buildExportPageGroups(ELEMENTS, 2);
+    const pages = [];
+
+    for (const pageElements of pageGroups) {
+      const pageHasAny = pageElements.some((element) => (grouped[element] || []).length > 0);
+      if (!pageHasAny) continue;
+
+      const url = await drawOwnedExportPageCanvas(grouped, pageElements);
+      pages.push({
+        pageNo: pages.length + 1,
+        elements: pageElements,
+        url,
+      });
+    }
+
+    const preview = document.createElement("div");
+    preview.className = "export-preview";
+
+    const images = document.createElement("div");
+    images.className = "preview-images";
+
+    for (const page of pages) {
+      const block = document.createElement("div");
+      block.className = "preview-block";
+      block.innerHTML = `
+        <h3>所持画像${page.pageNo} (${page.elements.join("・")}属性)</h3>
+        <img src="${page.url}" alt="所持画像${page.pageNo}">
+      `;
+
+      const dl = document.createElement("a");
+      dl.className = "button primary";
+      dl.textContent = `所持画像${page.pageNo}を保存`;
+      dl.href = page.url;
+      dl.download = `pricone_owned_page${page.pageNo}.png`;
+      dl.style.display = "inline-flex";
+      dl.style.alignItems = "center";
+      dl.style.justifyContent = "center";
+      dl.style.marginTop = "10px";
+
+      block.appendChild(dl);
+      images.appendChild(block);
+    }
+
+    preview.appendChild(images);
+    wrapper.appendChild(preview);
+    wrapper.insertAdjacentHTML(
+      "beforeend",
+      `<div class="note">所持チェックがONのキャラを属性ごとに画像出力しています。CR 0 の場合はバッジを表示しません。</div>`
+    );
+
+    showModal("所持キャラ画像出力", wrapper);
+  } catch (error) {
+    console.error("所持キャラ画像出力エラー:", error);
+    alert("所持キャラ画像出力でエラーが発生しました。F12 の Console を確認してください。");
   }
 }
 
@@ -1117,23 +1190,36 @@ function showExportMenu() {
     handleShareUrl();
   });
 
-  const imageBtn = document.createElement("button");
-  imageBtn.className = "button primary";
-  imageBtn.textContent = "画像出力";
-  imageBtn.addEventListener("click", () => {
+  const crSpImageBtn = document.createElement("button");
+  crSpImageBtn.className = "button primary";
+  crSpImageBtn.textContent = "CR&専用SP画像出力";
+  crSpImageBtn.addEventListener("click", () => {
     closeModal();
     handleExportImages();
   });
 
+  const ownedImageBtn = document.createElement("button");
+  ownedImageBtn.className = "button primary";
+  ownedImageBtn.textContent = "所持キャラ画像出力";
+  ownedImageBtn.addEventListener("click", () => {
+    closeModal();
+    handleExportOwnedImages();
+  });
+
   const unownedImageBtn = document.createElement("button");
-  unownedImageBtn.className = "button";
-  unownedImageBtn.textContent = "未所持画像出力";
+  unownedImageBtn.className = "button primary";
+  unownedImageBtn.textContent = "未所持キャラ画像出力";
   unownedImageBtn.addEventListener("click", () => {
     closeModal();
     handleExportUnownedImages();
   });
 
-  showModal("外部出力", wrapper, [imageBtn, unownedImageBtn, urlBtn]);
+  showModal("外部出力", wrapper, [
+    urlBtn,
+    crSpImageBtn,
+    ownedImageBtn,
+    unownedImageBtn,
+  ]);
 }
 
 function handleBulkOwned() {
@@ -1456,6 +1542,174 @@ function syncToolbarMenuForViewport() {
     toolbarToggleBtn.textContent = "操作メニューを開く";
     toolbarToggleBtn.setAttribute("aria-expanded", "false");
   }
+}
+
+function buildExportPageGroups(elements, perPage = 2) {
+  const pages = [];
+  for (let i = 0; i < elements.length; i += perPage) {
+    pages.push(elements.slice(i, i + perPage));
+  }
+  return pages;
+}
+
+async function drawOwnedExportPageCanvas(grouped, pageElements) {
+  const pagePaddingX = 28;
+  const pagePaddingTop = 24;
+  const pagePaddingBottom = 28;
+  const headerH = 96;
+
+  const blockGapX = 20;
+  const blockGapY = 18;
+  const blockWidth = 360;
+
+  const rows = buildRowsForPage(pageElements);
+
+  const blockHeights = rows.map(([left, right]) => {
+    const leftHeight = left ? getElementBlockHeight(grouped[left] || []) : 0;
+    const rightHeight = right ? getElementBlockHeight(grouped[right] || []) : 0;
+    return Math.max(leftHeight, rightHeight);
+  });
+
+  const width = pagePaddingX * 2 + blockWidth * 2 + blockGapX;
+  const totalBlocksHeight =
+    blockHeights.reduce((sum, h) => sum + h, 0) + blockGapY * Math.max(0, rows.length - 1);
+  const height = pagePaddingTop + headerH + 20 + totalBlocksHeight + pagePaddingBottom;
+
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+
+  ctx.fillStyle = "#f9fafb";
+  ctx.fillRect(0, 0, width, height);
+
+  drawOwnedExportHeader(ctx, width, pagePaddingX, pagePaddingTop, headerH);
+
+  let currentY = pagePaddingTop + headerH + 20;
+
+  for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+    const [leftElement, rightElement] = rows[rowIndex];
+    const rowHeight = blockHeights[rowIndex];
+
+    const leftX = pagePaddingX;
+    const rightX = pagePaddingX + blockWidth + blockGapX;
+
+    if (leftElement) {
+      await drawOwnedElementBlock(ctx, leftElement, grouped[leftElement] || [], leftX, currentY, blockWidth);
+    }
+
+    if (rightElement) {
+      await drawOwnedElementBlock(ctx, rightElement, grouped[rightElement] || [], rightX, currentY, blockWidth);
+    }
+
+    currentY += rowHeight + blockGapY;
+  }
+
+  return canvas.toDataURL("image/png");
+}
+
+function drawOwnedExportHeader(ctx, canvasWidth, paddingX, topY, headerH) {
+  const values = Object.values(state);
+  const ownedCount = values.filter((v) => v.owned).length;
+  const today = getTodayString();
+  const ownerName = ownerNameInput.value.trim();
+
+  const leftX = paddingX;
+  const rightX = canvasWidth - paddingX;
+  const titleY = topY + 24;
+  const infoY = topY + 54;
+  const ownerY = topY + 78;
+
+  ctx.fillStyle = "#111827";
+  ctx.font = "bold 24px 'Segoe UI', 'Hiragino Sans', 'Yu Gothic UI', sans-serif";
+  ctx.textAlign = "start";
+  ctx.textBaseline = "middle";
+  ctx.fillText("プリコネ所持キャラ一覧", leftX, titleY);
+
+  ctx.fillStyle = "#4b5563";
+  ctx.font = "15px 'Segoe UI', 'Hiragino Sans', 'Yu Gothic UI', sans-serif";
+  ctx.fillText(`所持 ${ownedCount}`, leftX, infoY);
+
+  ctx.fillStyle = "#374151";
+  ctx.font = "15px 'Segoe UI', 'Hiragino Sans', 'Yu Gothic UI', sans-serif";
+  ctx.textAlign = "right";
+  ctx.fillText(today, rightX, infoY);
+
+  if (ownerName) {
+    ctx.fillStyle = "#111827";
+    ctx.font = "bold 16px 'Segoe UI', 'Hiragino Sans', 'Yu Gothic UI', sans-serif";
+    ctx.fillText(ownerName, rightX, ownerY);
+  }
+
+  ctx.strokeStyle = "#e5e7eb";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(leftX, topY + headerH);
+  ctx.lineTo(rightX, topY + headerH);
+  ctx.stroke();
+
+  ctx.textAlign = "start";
+  ctx.textBaseline = "alphabetic";
+}
+
+async function drawOwnedElementBlock(ctx, element, list, x, y, blockWidth) {
+  const sectionTitleH = 42;
+  const sectionInnerTop = 12;
+  const sectionInnerBottom = 14;
+  const iconAreaTop = 6;
+
+  const cols = 5;
+  const iconSize = 56;
+  const cellW = 64;
+  const cellH = 92;
+
+  const blockHeight = getElementBlockHeight(list);
+
+  ctx.fillStyle = "#ffffff";
+  roundRect(ctx, x, y, blockWidth, blockHeight, 16, true, false);
+
+  ctx.strokeStyle = "#e5e7eb";
+  ctx.lineWidth = 1;
+  roundRect(ctx, x, y, blockWidth, blockHeight, 16, false, true);
+
+  drawSectionHeaderInBlock(ctx, element, x + 14, y + 10, blockWidth - 28);
+
+  if (list.length === 0) {
+    ctx.fillStyle = "#9ca3af";
+    ctx.font = "14px 'Segoe UI', sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("該当キャラなし", x + blockWidth / 2, y + 68);
+    ctx.textAlign = "start";
+    ctx.textBaseline = "alphabetic";
+    return;
+  }
+
+  const images = await Promise.all(list.map(loadIconImage));
+
+  const gridStartX = x + 18;
+  const gridStartY = y + sectionTitleH + sectionInnerTop + iconAreaTop;
+
+  images.forEach((img, index) => {
+    const char = list[index];
+    const s = state[char.id];
+
+    const col = index % cols;
+    const row = Math.floor(index / cols);
+
+    const drawX = gridStartX + col * cellW;
+    const drawY = gridStartY + row * cellH;
+
+    drawRoundedImageOrPlaceholder(ctx, img, char, drawX, drawY, iconSize, iconSize);
+
+    if (s.cr > 0) {
+      drawCrBadge(ctx, drawX + iconSize - 1, drawY + iconSize - 1, s.cr);
+    }
+
+    if (s.sp === 1) {
+      drawSpBadge(ctx, drawX + iconSize - 2, drawY + 2);
+    }
+  });
 }
 
 initializeApp();
