@@ -447,6 +447,87 @@ async function handleExportImages() {
   }
 }
 
+async function handleExportUnownedImages() {
+  try {
+    const grouped = {};
+
+    for (const element of ELEMENTS) {
+      grouped[element] = characters
+        .filter((c) => c.element === element)
+        .sort((a, b) => a.sort - b.sort || a.name.localeCompare(b.name, "ja"))
+        .filter((c) => !state[c.id].owned);
+    }
+
+    const totalCount = Object.values(grouped).reduce((sum, list) => sum + list.length, 0);
+
+    const wrapper = document.createElement("div");
+
+    if (totalCount === 0) {
+      wrapper.innerHTML = `
+        <p>現在は未所持キャラがいません。</p>
+        <div class="note">すべてのキャラが所持済みです。</div>
+      `;
+      showModal("未所持画像出力", wrapper);
+      return;
+    }
+
+    const pages = [];
+
+    for (let i = 0; i < EXPORT_PAGE_GROUPS.length; i++) {
+      const pageElements = EXPORT_PAGE_GROUPS[i];
+      const pageHasAny = pageElements.some((element) => (grouped[element] || []).length > 0);
+
+      if (!pageHasAny) continue;
+
+      const url = await drawUnownedExportPageCanvas(grouped, pageElements);
+      pages.push({
+        pageNo: pages.length + 1,
+        elements: pageElements,
+        url,
+      });
+    }
+
+    const preview = document.createElement("div");
+    preview.className = "export-preview";
+
+    const images = document.createElement("div");
+    images.className = "preview-images";
+
+    for (const page of pages) {
+      const block = document.createElement("div");
+      block.className = "preview-block";
+      block.innerHTML = `
+        <h3>未所持画像${page.pageNo} (${page.elements.join("・")}属性)</h3>
+        <img src="${page.url}" alt="未所持画像${page.pageNo}">
+      `;
+
+      const dl = document.createElement("a");
+      dl.className = "button primary";
+      dl.textContent = `未所持画像${page.pageNo}を保存`;
+      dl.href = page.url;
+      dl.download = `pricone_unowned_page${page.pageNo}.png`;
+      dl.style.display = "inline-flex";
+      dl.style.alignItems = "center";
+      dl.style.justifyContent = "center";
+      dl.style.marginTop = "10px";
+
+      block.appendChild(dl);
+      images.appendChild(block);
+    }
+
+    preview.appendChild(images);
+    wrapper.appendChild(preview);
+    wrapper.insertAdjacentHTML(
+      "beforeend",
+      `<div class="note">未所持キャラのみを属性ごとに画像出力しています。</div>`
+    );
+
+    showModal("未所持画像出力", wrapper);
+  } catch (error) {
+    console.error("未所持画像出力エラー:", error);
+    alert("未所持画像出力でエラーが発生しました。F12 の Console を確認してください。");
+  }
+}
 
 async function drawElementCanvas(element, list) {
   const cols = 5;
@@ -725,6 +806,157 @@ async function drawExportPageCanvas(grouped, pageElements) {
   return canvas.toDataURL("image/png");
 }
 
+async function drawUnownedExportPageCanvas(grouped, pageElements) {
+  const pagePaddingX = 28;
+  const pagePaddingTop = 24;
+  const pagePaddingBottom = 28;
+  const headerH = 96;
+
+  const blockGapX = 20;
+  const blockGapY = 18;
+  const blockWidth = 360;
+
+  const rows = buildRowsForPage(pageElements);
+
+  const blockHeights = rows.map(([left, right]) => {
+    const leftHeight = left ? getUnownedElementBlockHeight(grouped[left] || []) : 0;
+    const rightHeight = right ? getUnownedElementBlockHeight(grouped[right] || []) : 0;
+    return Math.max(leftHeight, rightHeight);
+  });
+
+  const width = pagePaddingX * 2 + blockWidth * 2 + blockGapX;
+  const totalBlocksHeight =
+    blockHeights.reduce((sum, h) => sum + h, 0) + blockGapY * Math.max(0, rows.length - 1);
+  const height = pagePaddingTop + headerH + 20 + totalBlocksHeight + pagePaddingBottom;
+
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+
+  ctx.fillStyle = "#f9fafb";
+  ctx.fillRect(0, 0, width, height);
+
+  drawUnownedExportHeader(ctx, width, pagePaddingX, pagePaddingTop, headerH);
+
+  let currentY = pagePaddingTop + headerH + 20;
+
+  for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+    const [leftElement, rightElement] = rows[rowIndex];
+    const rowHeight = blockHeights[rowIndex];
+
+    const leftX = pagePaddingX;
+    const rightX = pagePaddingX + blockWidth + blockGapX;
+
+    if (leftElement) {
+      await drawUnownedElementBlock(ctx, leftElement, grouped[leftElement] || [], leftX, currentY, blockWidth);
+    }
+
+    if (rightElement) {
+      await drawUnownedElementBlock(ctx, rightElement, grouped[rightElement] || [], rightX, currentY, blockWidth);
+    }
+
+    currentY += rowHeight + blockGapY;
+  }
+
+  return canvas.toDataURL("image/png");
+}
+
+async function drawUnownedElementBlock(ctx, element, list, x, y, blockWidth) {
+  const sectionTitleH = 42;
+  const sectionInnerTop = 12;
+  const sectionInnerBottom = 14;
+  const iconAreaTop = 6;
+
+  const cols = 5;
+  const iconSize = 56;
+  const cellW = 64;
+  const cellH = 72;
+
+  const blockHeight = getUnownedElementBlockHeight(list);
+
+  ctx.fillStyle = "#ffffff";
+  roundRect(ctx, x, y, blockWidth, blockHeight, 16, true, false);
+
+  ctx.strokeStyle = "#e5e7eb";
+  ctx.lineWidth = 1;
+  roundRect(ctx, x, y, blockWidth, blockHeight, 16, false, true);
+
+  drawSectionHeaderInBlock(ctx, element, x + 14, y + 10, blockWidth - 28);
+
+  if (list.length === 0) {
+    ctx.fillStyle = "#9ca3af";
+    ctx.font = "14px 'Segoe UI', sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("該当キャラなし", x + blockWidth / 2, y + 68);
+    ctx.textAlign = "start";
+    ctx.textBaseline = "alphabetic";
+    return;
+  }
+
+  const images = await Promise.all(list.map(loadIconImage));
+
+  const gridStartX = x + 18;
+  const gridStartY = y + sectionTitleH + sectionInnerTop + iconAreaTop;
+
+  images.forEach((img, index) => {
+    const char = list[index];
+
+    const col = index % cols;
+    const row = Math.floor(index / cols);
+
+    const drawX = gridStartX + col * cellW;
+    const drawY = gridStartY + row * cellH;
+
+    drawRoundedImageOrPlaceholder(ctx, img, char, drawX, drawY, iconSize, iconSize);
+  });
+}
+
+function drawUnownedExportHeader(ctx, canvasWidth, paddingX, topY, headerH) {
+  const values = Object.values(state);
+  const unownedCount = values.filter((v) => !v.owned).length;
+  const today = getTodayString();
+  const ownerName = ownerNameInput.value.trim();
+
+  const leftX = paddingX;
+  const rightX = canvasWidth - paddingX;
+  const titleY = topY + 24;
+  const infoY = topY + 54;
+  const ownerY = topY + 78;
+
+  ctx.fillStyle = "#111827";
+  ctx.font = "bold 24px 'Segoe UI', 'Hiragino Sans', 'Yu Gothic UI', sans-serif";
+  ctx.textAlign = "start";
+  ctx.textBaseline = "middle";
+  ctx.fillText("プリコネ未所持キャラ一覧", leftX, titleY);
+
+  ctx.fillStyle = "#4b5563";
+  ctx.font = "15px 'Segoe UI', 'Hiragino Sans', 'Yu Gothic UI', sans-serif";
+  ctx.fillText(`未所持 ${unownedCount}`, leftX, infoY);
+
+  ctx.fillStyle = "#374151";
+  ctx.font = "15px 'Segoe UI', 'Hiragino Sans', 'Yu Gothic UI', sans-serif";
+  ctx.textAlign = "right";
+  ctx.fillText(today, rightX, infoY);
+
+  if (ownerName) {
+    ctx.fillStyle = "#111827";
+    ctx.font = "bold 16px 'Segoe UI', 'Hiragino Sans', 'Yu Gothic UI', sans-serif";
+    ctx.fillText(ownerName, rightX, ownerY);
+  }
+
+  ctx.strokeStyle = "#e5e7eb";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(leftX, topY + headerH);
+  ctx.lineTo(rightX, topY + headerH);
+  ctx.stroke();
+
+  ctx.textAlign = "start";
+  ctx.textBaseline = "alphabetic";
+}
+
 function drawSectionHeader(ctx, element, x, y, width) {
   const colorMap = {
     "火": "#ef4444",
@@ -869,7 +1101,15 @@ function showExportMenu() {
     handleExportImages();
   });
 
-  showModal("外部出力", wrapper, [imageBtn, urlBtn]);
+  const unownedImageBtn = document.createElement("button");
+  unownedImageBtn.className = "button";
+  unownedImageBtn.textContent = "未所持画像出力";
+  unownedImageBtn.addEventListener("click", () => {
+    closeModal();
+    handleExportUnownedImages();
+  });
+
+  showModal("外部出力", wrapper, [imageBtn, unownedImageBtn, urlBtn]);
 }
 
 function handleBulkOwned() {
@@ -1042,14 +1282,13 @@ function handleBackupImport() {
   input.click();
 }
 
-function getElementBlockHeight(list) {
+function getUnownedElementBlockHeight(list) {
   const sectionTitleH = 42;
   const sectionInnerTop = 12;
   const sectionInnerBottom = 14;
   const iconAreaTop = 6;
   const cols = 5;
-  const cellW = 64;
-  const cellH = 92;
+  const cellH = 72;
 
   const count = list.length;
   const rows = Math.max(1, Math.ceil(count / cols));
