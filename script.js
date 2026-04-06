@@ -1185,7 +1185,7 @@ function getTodayString() {
   const y = now.getFullYear();
   const m = String(now.getMonth() + 1).padStart(2, "0");
   const d = String(now.getDate()).padStart(2, "0");
-  return `${y}/${m}/${d}`;
+  return `${y}-${m}-${d}`;
 }
 
 function drawExportHeader(ctx, canvasWidth, paddingX, topY, headerH) {
@@ -1247,6 +1247,14 @@ function showExportMenu() {
     handleShareUrl();
   });
 
+  const sheetCsvBtn = document.createElement("button");
+  sheetCsvBtn.className = "button primary";
+  sheetCsvBtn.textContent = "スプレッドシート読込データ出力";
+  sheetCsvBtn.addEventListener("click", () => {
+    closeModal();
+    handleSpreadsheetCsvExport();
+  });
+
   const crSpImageBtn = document.createElement("button");
   crSpImageBtn.className = "button primary";
   crSpImageBtn.textContent = "CR&専用SP画像出力";
@@ -1273,10 +1281,129 @@ function showExportMenu() {
 
   showModal("外部出力", wrapper, [
     urlBtn,
+    sheetCsvBtn,
     crSpImageBtn,
     ownedImageBtn,
     unownedImageBtn,
   ]);
+}
+
+function handleSpreadsheetCsvExport() {
+  try {
+    const csvText = buildSpreadsheetCsvText();
+    const fileName = buildSpreadsheetCsvFileName();
+    downloadCsvFile(csvText, fileName);
+  } catch (error) {
+    console.error("スプレッドシート読込データ出力エラー:", error);
+    alert("スプレッドシート読込データ出力でエラーが発生しました。");
+  }
+}
+
+function buildSpreadsheetCsvText() {
+  const header = [
+    "表示名",
+    "更新日",
+    "総所持数",
+    "CR1以上数",
+    "SP所持数",
+    "キャラ名",
+    "コネクトランク",
+    "共有URL"
+  ];
+
+  const rows = buildSpreadsheetCsvRows();
+
+  return [header, ...rows]
+    .map(row => row.map(escapeCsvCell).join(","))
+    .join("\r\n");
+}
+
+function buildSpreadsheetCsvRows() {
+  const ownerName = (ownerNameInput?.value || "").trim();
+  const displayName = ownerName || "未設定";
+  const updateDate = getTodayString();
+  const summary = getSummaryCounts();
+  const shareUrl = buildCurrentShareUrl();
+
+  const crCharacters = characters
+    .filter(char => {
+      const s = state[char.id];
+      return s?.owned && Number(s.cr || 0) > 0;
+    })
+    .sort((a, b) =>
+      Number(state[b.id]?.cr || 0) - Number(state[a.id]?.cr || 0) ||
+      a.sort - b.sort ||
+      a.name.localeCompare(b.name, "ja")
+    );
+
+  if (crCharacters.length === 0) {
+    return [[
+      displayName,
+      updateDate,
+      summary.owned,
+      summary.crPositive,
+      summary.spPositive,
+      "",
+      "",
+      shareUrl
+    ]];
+  }
+
+  return crCharacters.map(char => {
+    const s = state[char.id];
+    return [
+      displayName,
+      updateDate,
+      summary.owned,
+      summary.crPositive,
+      summary.spPositive,
+      char.name,
+      Number(s.cr || 0),
+      shareUrl
+    ];
+  });
+}
+
+function buildCurrentShareUrl() {
+  const encoded = encodeShareDataCompactV2();
+  return `${location.origin}${location.pathname}?z=${encoded}`;
+}
+
+function buildSpreadsheetCsvFileName() {
+  const ownerName = (ownerNameInput?.value || "player").trim() || "player";
+  const safeOwner = ownerName.replace(/[\\/:*?"<>|]/g, "_");
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, "0");
+  const d = String(now.getDate()).padStart(2, "0");
+  const hh = String(now.getHours()).padStart(2, "0");
+  const mm = String(now.getMinutes()).padStart(2, "0");
+
+  return `pricone_sheet_import_${safeOwner}_${y}${m}${d}_${hh}${mm}.csv`;
+}
+
+function escapeCsvCell(value) {
+  const s = String(value ?? "");
+  if (s.includes(",") || s.includes('"') || s.includes("\n") || s.includes("\r")) {
+    return `"${s.replace(/"/g, '""')}"`;
+  }
+  return s;
+}
+
+function downloadCsvFile(csvText, fileName) {
+  const bom = "\uFEFF";
+  const blob = new Blob([bom + csvText], {
+    type: "text/csv;charset=utf-8;"
+  });
+
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
 }
 
 function handleBulkOwned() {
