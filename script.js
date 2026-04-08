@@ -1308,6 +1308,7 @@ function buildSpreadsheetCsvText() {
     "SP所持数",
     "キャラ名",
     "コネクトランク",
+    "専用SP",
     "共有URL"
   ];
 
@@ -1345,6 +1346,7 @@ function buildSpreadsheetCsvRows() {
       summary.spPositive,
       "",
       "",
+      "",
       shareUrl
     ]];
   }
@@ -1359,6 +1361,7 @@ function buildSpreadsheetCsvRows() {
       summary.spPositive,
       char.name,
       Number(s.cr || 0),
+      Number(s.sp || 0) === 1 ? "あり" : "なし",
       shareUrl
     ];
   });
