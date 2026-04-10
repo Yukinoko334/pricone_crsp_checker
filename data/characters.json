@@ -2308,5 +2308,12 @@
     "element": "闇",
     "sort": 1,
     "icon": "images/wakana_w.png"
+  },
+  {
+    "id": "0331",
+    "name": "キョウカ(ゴシック)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/kyoka_g.png"
   }
 ]
