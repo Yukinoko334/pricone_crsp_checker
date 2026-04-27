@@ -2315,5 +2315,12 @@
     "element": "闇",
     "sort": 1,
     "icon": "images/kyoka_g.png"
+  },
+  {
+    "id": "0332",
+    "name": "キャル(覇瞳天星)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/kyaru_k.png"
   }
 ]
