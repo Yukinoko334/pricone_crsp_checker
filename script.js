@@ -1326,33 +1326,15 @@ function buildSpreadsheetCsvRows() {
   const summary = getSummaryCounts();
   const shareUrl = buildCurrentShareUrl();
 
-  const crCharacters = characters
-    .filter(char => {
-      const s = state[char.id];
-      return s?.owned && Number(s.cr || 0) > 0;
-    })
-    .sort((a, b) =>
-      Number(state[b.id]?.cr || 0) - Number(state[a.id]?.cr || 0) ||
-      a.sort - b.sort ||
-      a.name.localeCompare(b.name, "ja")
-    );
+  const allCharacters = [...characters].sort((a, b) =>
+    a.sort - b.sort ||
+    a.name.localeCompare(b.name, "ja")
+  );
 
-  if (crCharacters.length === 0) {
-    return [[
-      displayName,
-      updateDate,
-      summary.owned,
-      summary.crPositive,
-      summary.spPositive,
-      "",
-      "",
-      "",
-      shareUrl
-    ]];
-  }
+  return allCharacters.map(char => {
+    const s = state[char.id] || { owned: false, cr: 0, sp: 0 };
+    const owned = !!s.owned;
 
-  return crCharacters.map(char => {
-    const s = state[char.id];
     return [
       displayName,
       updateDate,
@@ -1360,8 +1342,8 @@ function buildSpreadsheetCsvRows() {
       summary.crPositive,
       summary.spPositive,
       char.name,
-      Number(s.cr || 0),
-      Number(s.sp || 0) === 1 ? "あり" : "なし",
+      owned ? Number(s.cr || 0) : "未所持",
+      owned && Number(s.sp || 0) === 1 ? "あり" : "なし",
       shareUrl
     ];
   });

@@ -2322,5 +2322,19 @@
     "element": "闇",
     "sort": 1,
     "icon": "images/kyaru_k.png"
+  },
+  {
+    "id": "0333",
+    "name": "ミホ(ガルパン)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/miho.png"
+  },
+  {
+    "id": "0334",
+    "name": "マホ(ガルパン)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/maho_g.png"
   }
 ]
