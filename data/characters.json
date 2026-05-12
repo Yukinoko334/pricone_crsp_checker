@@ -2336,5 +2336,12 @@
     "element": "火",
     "sort": 1,
     "icon": "images/maho_g.png"
+  },
+  {
+    "id": "0335",
+    "name": "エリカ(ガルパン)",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/erika_g.png"
   }
 ]
