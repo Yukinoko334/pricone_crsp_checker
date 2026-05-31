@@ -2343,5 +2343,33 @@
     "element": "風",
     "sort": 1,
     "icon": "images/erika_g.png"
+  },
+  {
+    "id": "0336",
+    "name": "ルルィ",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/rurui.png"
+  },
+  {
+    "id": "0337",
+    "name": "リリ(ヴァルキュリア)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/riri_v.png"
+  },
+  {
+    "id": "0338",
+    "name": "プレシア(ヴァルキュリア)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/puresia_v.png"
+  },
+  {
+    "id": "0339",
+    "name": "クリア(ヴァルキュリア)",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/kuria_v.png"
   }
 ]
