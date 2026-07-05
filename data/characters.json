@@ -2371,5 +2371,19 @@
     "element": "光",
     "sort": 1,
     "icon": "images/kuria_v.png"
+  },
+  {
+    "id": "0340",
+    "name": "シェフィ(ヴァードラッヘ)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/siefi_v.png"
+  },
+  {
+    "id": "0341",
+    "name": "ルイズマリー(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/ruizumary_s.png"
   }
 ]
