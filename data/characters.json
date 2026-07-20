@@ -2385,5 +2385,12 @@
     "element": "水",
     "sort": 1,
     "icon": "images/ruizumary_s.png"
+  },
+  {
+    "id": "0342",
+    "name": "クレジッタ(サマー)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/kurejita_s.png"
   }
 ]
