@@ -2392,5 +2392,12 @@
     "element": "火",
     "sort": 1,
     "icon": "images/kurejita_s.png"
+  },
+  {
+    "id": "0343",
+    "name": "フブキ(サマー)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/fubuki_s.png"
   }
 ]
