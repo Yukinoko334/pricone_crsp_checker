@@ -1,0 +1,11 @@
+{
+  "year": 2026,
+  "month": 7,
+  "bosses": [
+    { "number": 1, "name": "1ボス", "image": "./images/bosses/2026-07/boss1.png" },
+    { "number": 2, "name": "2ボス", "image": "./images/bosses/2026-07/boss2.png" },
+    { "number": 3, "name": "3ボス", "image": "./images/bosses/2026-07/boss3.png" },
+    { "number": 4, "name": "4ボス", "image": "./images/bosses/2026-07/boss4.png" },
+    { "number": 5, "name": "5ボス", "image": "./images/bosses/2026-07/boss5.png" }
+  ]
+}

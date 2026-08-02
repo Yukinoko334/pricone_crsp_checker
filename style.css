@@ -598,3 +598,224 @@ code {
     grid-template-columns: 1fr;
   }
 }
+
+/* ===== クラバトCR一致状況：第1段階 ===== */
+.clan-battle-form {
+  display: grid;
+  gap: 16px;
+}
+
+.clan-battle-form-heading p {
+  margin-bottom: 4px;
+}
+
+.clan-battle-boss-list {
+  display: grid;
+  gap: 14px;
+  max-height: 58vh;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.clan-battle-boss-row {
+  display: grid;
+  grid-template-columns: 116px minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  background: #f9fafb;
+}
+
+.clan-battle-boss-info {
+  display: grid;
+  justify-items: center;
+  gap: 7px;
+}
+
+.clan-battle-boss-label {
+  font-weight: 700;
+  color: #111827;
+}
+
+.clan-battle-boss-image-wrap {
+  width: 92px;
+  height: 92px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.clan-battle-boss-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.clan-battle-slots {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+.clan-battle-slot {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+  color: #4b5563;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.clan-battle-character-input {
+  width: 100%;
+  min-width: 0;
+  height: 40px;
+}
+
+.clan-battle-character-input.input-error {
+  border-color: #e11d48;
+  outline: 2px solid rgba(225, 29, 72, 0.16);
+}
+
+.clan-battle-message {
+  min-height: 20px;
+  color: #166534;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.clan-battle-message.error {
+  color: #be123c;
+}
+
+@media (max-width: 1100px) {
+  .clan-battle-slots {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .clan-battle-boss-row {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .clan-battle-boss-info {
+    grid-template-columns: auto 82px;
+    justify-content: start;
+    align-items: center;
+  }
+
+  .clan-battle-boss-image-wrap {
+    width: 82px;
+    height: 82px;
+  }
+
+  .clan-battle-slots {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 420px) {
+  .clan-battle-slots {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== クラバトCR一致状況：第2段階画像プレビュー ===== */
+.clan-battle-result-preview {
+  display: grid;
+  gap: 10px;
+}
+
+.clan-battle-result-scroll {
+  max-height: 62vh;
+}
+
+.clan-battle-result-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  background: #f3f4f6;
+}
+
+.modal-actions a.button {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== クラバトCR一致状況：入力UI調整 ===== */
+.modal.clan-battle-modal {
+  width: min(1200px, 95vw);
+  max-height: 94vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal.clan-battle-modal #modalBody {
+  min-width: 0;
+  min-height: 0;
+}
+
+.clan-battle-form-heading p,
+.clan-battle-form-heading .note {
+  font-weight: 700;
+}
+
+.clan-battle-form-heading p {
+  font-size: 16px;
+  color: #374151;
+}
+
+.clan-battle-form-heading .note {
+  color: #6b7280;
+}
+
+.clan-battle-boss-list {
+  overflow-x: hidden;
+}
+
+.clan-battle-boss-row {
+  width: 100%;
+  min-width: 0;
+}
+
+.clan-battle-slots {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  width: 100%;
+  min-width: 0;
+}
+
+.clan-battle-slot,
+.clan-battle-character-input {
+  min-width: 0;
+}
+
+@media (max-width: 720px) {
+  .modal.clan-battle-modal {
+    width: min(96vw, 1200px);
+  }
+
+  .clan-battle-slots {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 420px) {
+  .clan-battle-slots {
+    grid-template-columns: 1fr;
+  }
+}

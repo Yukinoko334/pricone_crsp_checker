@@ -1,9 +1,12 @@
 const ELEMENTS = ["火", "水", "風", "光", "闇"];
 const STORAGE_KEY = "pricone_checker_state_v1";
 const OWNER_NAME_KEY = "pricone_checker_owner_name_v1";
+const CLAN_BATTLE_FORMATION_KEY = "pricone_checker_clan_battle_formation_v1";
+const CLAN_BATTLE_BOSS_CONFIG_PATH = "./data/clan_battle_bosses.json";
 
 let characters = [];
 let state = {};
+let clanBattleBossConfig = null;
 
 const app = document.getElementById("app");
 const searchInput = document.getElementById("searchInput");
@@ -11,6 +14,7 @@ const ownershipFilter = document.getElementById("ownershipFilter");
 const crRangeFilter = document.getElementById("crRangeFilter");
 const spFilter = document.getElementById("spFilter");
 const exportMenuBtn = document.getElementById("exportMenuBtn");
+const clanBattleBtn = document.getElementById("clanBattleBtn");
 const bulkOwnedBtn = document.getElementById("bulkOwnedBtn");
 const bulkUnownedBtn = document.getElementById("bulkUnownedBtn");
 const bulkApplyBtn = document.getElementById("bulkApplyBtn");
@@ -42,6 +46,7 @@ async function initializeApp() {
     crRangeFilter.addEventListener("change", render);
     spFilter.addEventListener("change", render);
     exportMenuBtn.addEventListener("click", showExportMenu);
+    clanBattleBtn.addEventListener("click", showClanBattleFormationModal);
     bulkOwnedBtn.addEventListener("click", handleBulkOwned);
     bulkUnownedBtn.addEventListener("click", handleBulkUnowned);
     bulkApplyBtn.addEventListener("click", showBulkApplyModal);
@@ -84,6 +89,7 @@ async function loadCharacters() {
     element: String(char.element ?? ""),
     sort: Number.isFinite(Number(char.sort)) ? Number(char.sort) : index + 1,
     icon: String(char.icon ?? ""),
+    specialSp: char.specialSp === true,
   }));
 }
 
@@ -824,6 +830,13 @@ function showModal(title, content, extraButtons = []) {
   modalTitle.textContent = title;
   modalBody.innerHTML = "";
 
+  const modal = modalBackdrop.querySelector(".modal");
+  const isClanBattleModal =
+    typeof content !== "string" &&
+    (content.classList?.contains("clan-battle-form") ||
+      content.classList?.contains("clan-battle-result-preview"));
+  modal?.classList.toggle("clan-battle-modal", isClanBattleModal);
+
   if (typeof content === "string") {
     modalBody.innerHTML = content;
   } else {
@@ -843,6 +856,7 @@ function showModal(title, content, extraButtons = []) {
 
 function closeModal() {
   modalBackdrop.classList.remove("show");
+  modalBackdrop.querySelector(".modal")?.classList.remove("clan-battle-modal");
 }
 
 function elementClass(element) {
@@ -1879,6 +1893,755 @@ async function drawOwnedElementBlock(ctx, element, list, x, y, blockWidth) {
       drawSpBadge(ctx, drawX + iconSize - 2, drawY + 2);
     }
   });
+}
+
+
+async function loadClanBattleBossConfig() {
+  if (clanBattleBossConfig) return clanBattleBossConfig;
+
+  try {
+    const response = await fetch(CLAN_BATTLE_BOSS_CONFIG_PATH, { cache: "no-store" });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+    const raw = await response.json();
+    const bosses = Array.isArray(raw?.bosses) ? raw.bosses : [];
+    if (bosses.length !== 5) {
+      throw new Error("bosses は5件必要です");
+    }
+
+    clanBattleBossConfig = {
+      year: Number(raw.year),
+      month: Number(raw.month),
+      bosses: bosses.map((boss, index) => ({
+        number: Number(boss.number ?? index + 1),
+        name: String(boss.name ?? `${index + 1}ボス`),
+        image: String(boss.image ?? ""),
+      })),
+    };
+    return clanBattleBossConfig;
+  } catch (error) {
+    console.error("クラバトボス設定の読み込みに失敗しました:", error);
+    throw new Error("クラバトボス設定を読み込めませんでした。data/clan_battle_bosses.json を確認してください。");
+  }
+}
+
+function createEmptyClanBattleFormation(config) {
+  return {
+    year: config.year,
+    month: config.month,
+    bosses: Object.fromEntries(config.bosses.map((boss) => [String(boss.number), ["", "", "", "", ""]])),
+  };
+}
+
+function loadClanBattleFormation(config) {
+  const empty = createEmptyClanBattleFormation(config);
+
+  try {
+    const raw = localStorage.getItem(CLAN_BATTLE_FORMATION_KEY);
+    if (!raw) return empty;
+
+    const parsed = JSON.parse(raw);
+    if (Number(parsed?.year) !== config.year || Number(parsed?.month) !== config.month) {
+      return empty;
+    }
+
+    for (const boss of config.bosses) {
+      const values = parsed?.bosses?.[String(boss.number)];
+      if (!Array.isArray(values)) continue;
+
+      empty.bosses[String(boss.number)] = Array.from({ length: 5 }, (_, index) => {
+        const id = String(values[index] ?? "");
+        return characters.some((char) => char.id === id) ? id : "";
+      });
+    }
+  } catch (error) {
+    console.warn("保存済みクラバト編成の復元に失敗しました:", error);
+  }
+
+  return empty;
+}
+
+function saveClanBattleFormation(formation) {
+  localStorage.setItem(CLAN_BATTLE_FORMATION_KEY, JSON.stringify(formation));
+}
+
+function buildCharacterDatalist() {
+  const datalist = document.createElement("datalist");
+  datalist.id = "clanBattleCharacterCandidates";
+
+  [...characters]
+    .sort((a, b) => a.sort - b.sort || a.name.localeCompare(b.name, "ja"))
+    .forEach((char) => {
+      const option = document.createElement("option");
+      option.value = char.name;
+      datalist.appendChild(option);
+    });
+
+  return datalist;
+}
+
+function findCharacterByExactName(name) {
+  const normalized = String(name ?? "").trim();
+  return characters.find((char) => char.name === normalized) ?? null;
+}
+
+async function showClanBattleFormationModal() {
+  try {
+    const config = await loadClanBattleBossConfig();
+    const savedFormation = loadClanBattleFormation(config);
+    const wrapper = document.createElement("div");
+    wrapper.className = "clan-battle-form";
+
+    const heading = document.createElement("div");
+    heading.className = "clan-battle-form-heading";
+    heading.innerHTML = `
+      <p>${escapeHtml(config.year)}年${escapeHtml(config.month)}月の1～5ボス編成を入力してください。</p>
+      <div class="note">キャラ名を入力すると候補が表示されます。同じボス内では同一キャラを重複登録できません。</div>
+    `;
+    wrapper.appendChild(heading);
+    wrapper.appendChild(buildCharacterDatalist());
+
+    const rows = document.createElement("div");
+    rows.className = "clan-battle-boss-list";
+
+    for (const boss of config.bosses) {
+      const row = document.createElement("section");
+      row.className = "clan-battle-boss-row";
+      row.dataset.bossNumber = String(boss.number);
+
+      const values = savedFormation.bosses[String(boss.number)] ?? ["", "", "", "", ""];
+      const inputsHtml = values.map((charId, index) => {
+        const char = characters.find((item) => item.id === charId);
+        return `
+          <label class="clan-battle-slot">
+            <span>キャラ${index + 1}</span>
+            <input
+              class="control clan-battle-character-input"
+              type="text"
+              list="clanBattleCharacterCandidates"
+              autocomplete="off"
+              placeholder="キャラ名"
+              value="${escapeHtml(char?.name ?? "")}"
+              data-slot-index="${index}"
+            >
+          </label>
+        `;
+      }).join("");
+
+      row.innerHTML = `
+        <div class="clan-battle-boss-info">
+          <div class="clan-battle-boss-label">${escapeHtml(boss.name)}</div>
+          <div class="clan-battle-boss-image-wrap">
+            ${boss.image
+              ? `<img src="${escapeHtml(boss.image)}" alt="${escapeHtml(boss.name)}">`
+              : `<span>画像未設定</span>`}
+          </div>
+        </div>
+        <div class="clan-battle-slots">${inputsHtml}</div>
+      `;
+
+      rows.appendChild(row);
+    }
+
+    wrapper.appendChild(rows);
+
+    const message = document.createElement("div");
+    message.className = "clan-battle-message";
+    message.setAttribute("aria-live", "polite");
+    wrapper.appendChild(message);
+
+    const saveBtn = document.createElement("button");
+    saveBtn.className = "button primary";
+    saveBtn.textContent = "入力値を保存";
+    saveBtn.addEventListener("click", () => {
+      const result = collectClanBattleFormation(wrapper, config, false);
+      if (!result.ok) {
+        message.textContent = result.message;
+        message.classList.add("error");
+        return;
+      }
+
+      saveClanBattleFormation(result.formation);
+      message.textContent = "編成入力値を保存しました。";
+      message.classList.remove("error");
+    });
+
+    const outputBtn = document.createElement("button");
+    outputBtn.className = "button primary";
+    outputBtn.textContent = "CR一致状況出力";
+    outputBtn.addEventListener("click", async () => {
+      const result = collectClanBattleFormation(wrapper, config, true);
+      if (!result.ok) {
+        message.textContent = result.message;
+        message.classList.add("error");
+        return;
+      }
+
+      const ownerName = ownerNameInput.value.trim();
+      if (!ownerName) {
+        message.textContent = "プレイヤー名を入力してから出力してください。";
+        message.classList.add("error");
+        ownerNameInput.focus();
+        return;
+      }
+
+      saveClanBattleFormation(result.formation);
+      message.textContent = "画像を生成しています…";
+      message.classList.remove("error");
+      outputBtn.disabled = true;
+
+      try {
+        const imageUrl = await drawClanBattleResultCanvas(config, result.formation, ownerName);
+        showClanBattleResultPreview(config, imageUrl, ownerName);
+      } catch (error) {
+        console.error("クラバトCR一致状況画像出力エラー:", error);
+        message.textContent = "画像生成に失敗しました。画像パスやブラウザのConsoleを確認してください。";
+        message.classList.add("error");
+      } finally {
+        outputBtn.disabled = false;
+      }
+    });
+
+    showModal("クラバトCR一致状況", wrapper, [saveBtn, outputBtn]);
+  } catch (error) {
+    console.error(error);
+    const wrapper = document.createElement("div");
+    wrapper.innerHTML = `<p>${escapeHtml(error.message)}</p>`;
+    showModal("クラバトCR一致状況", wrapper);
+  }
+}
+
+function collectClanBattleFormation(wrapper, config, requireAll) {
+  wrapper.querySelectorAll(".clan-battle-character-input").forEach((input) => input.classList.remove("input-error"));
+
+  const formation = createEmptyClanBattleFormation(config);
+  const errors = [];
+
+  for (const boss of config.bosses) {
+    const row = wrapper.querySelector(`[data-boss-number="${boss.number}"]`);
+    const inputs = [...row.querySelectorAll(".clan-battle-character-input")];
+    const selectedIds = [];
+
+    inputs.forEach((input, index) => {
+      const name = input.value.trim();
+      if (!name) {
+        if (requireAll) {
+          input.classList.add("input-error");
+          errors.push(`${boss.name}のキャラ${index + 1}が未入力です`);
+        }
+        selectedIds.push("");
+        return;
+      }
+
+      const char = findCharacterByExactName(name);
+      if (!char) {
+        input.classList.add("input-error");
+        errors.push(`${boss.name}のキャラ${index + 1}は候補から選択してください`);
+        selectedIds.push("");
+        return;
+      }
+
+      selectedIds.push(char.id);
+    });
+
+    const duplicateIds = selectedIds.filter((id, index) => id && selectedIds.indexOf(id) !== index);
+    if (duplicateIds.length > 0) {
+      inputs.forEach((input, index) => {
+        if (selectedIds[index] && duplicateIds.includes(selectedIds[index])) input.classList.add("input-error");
+      });
+      errors.push(`${boss.name}内で同じキャラが重複しています`);
+    }
+
+    formation.bosses[String(boss.number)] = selectedIds;
+  }
+
+  if (errors.length > 0) {
+    return { ok: false, message: errors[0] + (errors.length > 1 ? `（ほか${errors.length - 1}件）` : "") };
+  }
+
+  return { ok: true, formation };
+}
+
+
+function loadImageByUrl(url) {
+  return new Promise((resolve) => {
+    if (!url) return resolve(null);
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => resolve(img);
+    img.onerror = () => resolve(null);
+    img.src = url;
+  });
+}
+
+function getClanBattleDuplicateCharacterIds(config, formation) {
+  const bossCountByCharacterId = new Map();
+
+  for (const boss of config.bosses) {
+    const ids = formation.bosses[String(boss.number)] || [];
+    const uniqueIdsInBoss = new Set(ids.filter(Boolean));
+
+    for (const id of uniqueIdsInBoss) {
+      bossCountByCharacterId.set(id, (bossCountByCharacterId.get(id) || 0) + 1);
+    }
+  }
+
+  return new Set(
+    [...bossCountByCharacterId.entries()]
+      .filter(([, count]) => count >= 2)
+      .map(([id]) => id)
+  );
+}
+
+async function drawClanBattleResultCanvas(config, formation, ownerName) {
+  const canvasWidth = 920;
+  const paddingX = 34;
+  const paddingTop = 28;
+  const paddingBottom = 24;
+  const headerHeight = 104;
+  const cardGap = 16;
+  const cardHeight = 230;
+  const legendHeight = 170;
+
+  const canvasHeight =
+    paddingTop +
+    headerHeight +
+    config.bosses.length * cardHeight +
+    (config.bosses.length - 1) * cardGap +
+    legendHeight +
+    paddingBottom;
+
+  const canvas = document.createElement("canvas");
+  canvas.width = canvasWidth;
+  canvas.height = canvasHeight;
+  const ctx = canvas.getContext("2d");
+
+  ctx.fillStyle = "#f3f4f6";
+  ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+  ctx.fillStyle = "#111827";
+  ctx.font = "bold 28px 'Segoe UI', 'Hiragino Sans', 'Yu Gothic UI', sans-serif";
+  ctx.textAlign = "start";
+  ctx.textBaseline = "middle";
+  ctx.fillText(
+    `${config.year}年${config.month}月 クラバトCR一致状況`,
+    paddingX,
+    paddingTop + 24
+  );
+
+  ctx.fillStyle = "#111827";
+  ctx.font = "bold 20px 'Segoe UI', 'Hiragino Sans', 'Yu Gothic UI', sans-serif";
+  ctx.fillText(`プレイヤー名：${ownerName}`, paddingX, paddingTop + 62);
+
+  ctx.fillStyle = "#6b7280";
+  ctx.font = "14px 'Segoe UI', 'Hiragino Sans', 'Yu Gothic UI', sans-serif";
+  ctx.textAlign = "right";
+  ctx.fillText(getTodayString(), canvasWidth - paddingX, paddingTop + 62);
+  ctx.textAlign = "start";
+
+  const duplicateCharacterIds = getClanBattleDuplicateCharacterIds(config, formation);
+  const bossImages = await Promise.all(
+    config.bosses.map((boss) => loadImageByUrl(boss.image))
+  );
+
+  let cardY = paddingTop + headerHeight;
+
+  for (let bossIndex = 0; bossIndex < config.bosses.length; bossIndex++) {
+    const boss = config.bosses[bossIndex];
+    const ids = [...(formation.bosses[String(boss.number)] || [])].reverse();
+    const selectedChars = ids.map(
+      (id) => characters.find((char) => char.id === id) || null
+    );
+    const charImages = await Promise.all(
+      selectedChars.map((char) =>
+        char ? loadIconImage(char) : Promise.resolve(null)
+      )
+    );
+
+    drawClanBattleBossCard(ctx, {
+      boss,
+      bossImage: bossImages[bossIndex],
+      selectedChars,
+      charImages,
+      duplicateCharacterIds,
+      x: paddingX,
+      y: cardY,
+      width: canvasWidth - paddingX * 2,
+      height: cardHeight,
+    });
+
+    cardY += cardHeight + cardGap;
+  }
+
+  drawClanBattleLegend(
+    ctx,
+    paddingX,
+    cardY - cardGap + 18,
+    canvasWidth - paddingX * 2
+  );
+
+  return canvas.toDataURL("image/png");
+}
+
+function drawClanBattleBossCard(ctx, options) {
+  const {
+    boss,
+    bossImage,
+    selectedChars,
+    charImages,
+    duplicateCharacterIds,
+    x,
+    y,
+    width,
+    height,
+  } = options;
+
+  ctx.fillStyle = "#ffffff";
+  roundRect(ctx, x, y, width, height, 20, true, false);
+
+  ctx.strokeStyle = "#d1d5db";
+  ctx.lineWidth = 1;
+  roundRect(ctx, x, y, width, height, 20, false, true);
+
+  ctx.fillStyle = "#111827";
+  ctx.font =
+    "bold 20px 'Segoe UI', 'Hiragino Sans', 'Yu Gothic UI', sans-serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(boss.name, x + width / 2, y + 20);
+
+  const bossSize = 68;
+  const bossX = x + (width - bossSize) / 2;
+  const bossY = y + 28;
+
+  drawRoundedImageOrPlaceholder(
+    ctx,
+    bossImage,
+    { name: boss.name },
+    bossX,
+    bossY,
+    bossSize,
+    bossSize
+  );
+
+  const iconSize = 72;
+  const gap = 16;
+  const totalWidth = iconSize * 5 + gap * 4;
+  const startX = x + (width - totalWidth) / 2;
+  const iconY = bossY + bossSize + 8;
+
+  selectedChars.forEach((char, index) => {
+    const drawX = startX + index * (iconSize + gap);
+    const img = charImages[index];
+
+    drawRoundedImageOrPlaceholder(
+      ctx,
+      img,
+      char || { name: "未入力" },
+      drawX,
+      iconY,
+      iconSize,
+      iconSize
+    );
+
+    if (!char) return;
+
+    const charState = state[char.id] || {
+      owned: false,
+      cr: 0,
+      sp: 0,
+    };
+
+    const isDuplicate = duplicateCharacterIds.has(char.id);
+    const isSpecialSpMissing =
+      char.specialSp === true &&
+      charState.owned &&
+      charState.sp !== 1;
+
+    if (!charState.owned) {
+      ctx.save();
+      ctx.fillStyle = "rgba(17, 24, 39, 0.48)";
+      roundRect(ctx, drawX, iconY, iconSize, iconSize, 16, true, false);
+      ctx.restore();
+
+      drawCrBadge(
+        ctx,
+        drawX + iconSize - 2,
+        iconY + iconSize - 2,
+        "未"
+      );
+    } else {
+      drawCrBadge(
+        ctx,
+        drawX + iconSize - 2,
+        iconY + iconSize - 2,
+        charState.cr
+      );
+
+      if (charState.sp === 1) {
+        drawSpBadge(ctx, drawX + iconSize - 2, iconY + 2);
+      }
+
+      if (isSpecialSpMissing) {
+        drawClanBattleWarningIcon(ctx, drawX + 4, iconY + 4);
+        drawClanBattleSpecialSpWarningText(
+          ctx,
+          drawX + iconSize / 2,
+          iconY + iconSize + 15
+        );
+      }
+    }
+
+    if (isDuplicate) {
+      drawClanBattleDuplicateBorder(
+        ctx,
+        drawX,
+        iconY,
+        iconSize,
+        iconSize
+      );
+    }
+  });
+
+  ctx.textAlign = "start";
+  ctx.textBaseline = "alphabetic";
+}
+
+function drawClanBattleDuplicateBorder(ctx, x, y, width, height) {
+  ctx.save();
+  ctx.strokeStyle = "#ef4444";
+  ctx.lineWidth = 3;
+  roundRect(ctx, x + 1.5, y + 1.5, width - 3, height - 3, 15, false, true);
+  ctx.restore();
+}
+
+function drawClanBattleWarningIcon(ctx, x, y) {
+  ctx.save();
+
+  const size = 22;
+  ctx.beginPath();
+  ctx.moveTo(x + size / 2, y);
+  ctx.lineTo(x + size, y + size);
+  ctx.lineTo(x, y + size);
+  ctx.closePath();
+
+  ctx.fillStyle = "#facc15";
+  ctx.fill();
+  ctx.strokeStyle = "#111827";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  ctx.fillStyle = "#111827";
+  ctx.font = "bold 15px 'Segoe UI', sans-serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText("!", x + size / 2, y + size * 0.63);
+
+  ctx.restore();
+}
+
+function drawClanBattleSpecialSpWarningText(ctx, centerX, y) {
+  ctx.save();
+  ctx.fillStyle = "#dc2626";
+  ctx.font =
+    "bold 10px 'Segoe UI', 'Hiragino Sans', 'Yu Gothic UI', sans-serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText("専用SP未装備", centerX, y);
+  ctx.restore();
+}
+
+function drawClanBattleLegend(ctx, x, y, width) {
+  ctx.save();
+
+  const legendHeight = 150;
+  const outerPadding = 18;
+  const titleHeight = 30;
+  const columnGap = 14;
+  const rowGap = 12;
+  const cardHeight = 42;
+  const cardWidth = (width - outerPadding * 2 - columnGap) / 2;
+
+  ctx.fillStyle = "#ffffff";
+  roundRect(ctx, x, y, width, legendHeight, 14, true, false);
+
+  ctx.strokeStyle = "#d1d5db";
+  ctx.lineWidth = 1;
+  roundRect(ctx, x, y, width, legendHeight, 14, false, true);
+
+  const titleX = x + outerPadding;
+  const titleY = y + 19;
+
+  ctx.fillStyle = "#111827";
+  ctx.font =
+    "bold 13px 'Segoe UI', 'Hiragino Sans', 'Yu Gothic UI', sans-serif";
+  ctx.textAlign = "start";
+  ctx.textBaseline = "middle";
+  ctx.fillText("表示内容", titleX, titleY);
+
+  const titleWidth = ctx.measureText("表示内容").width;
+  ctx.strokeStyle = "#e5e7eb";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(titleX + titleWidth + 12, titleY);
+  ctx.lineTo(x + width - outerPadding, titleY);
+  ctx.stroke();
+
+  const leftX = x + outerPadding;
+  const rightX = leftX + cardWidth + columnGap;
+  const row1Y = y + titleHeight + 12;
+  const row2Y = row1Y + cardHeight + rowGap;
+
+  drawClanBattleLegendCard(ctx, {
+    x: leftX,
+    y: row1Y,
+    width: cardWidth,
+    height: cardHeight,
+    type: "duplicate",
+    label: "複数ボスで採用",
+  });
+
+  drawClanBattleLegendCard(ctx, {
+    x: rightX,
+    y: row1Y,
+    width: cardWidth,
+    height: cardHeight,
+    type: "sp",
+    label: "専用SP装備済み",
+  });
+
+  drawClanBattleLegendCard(ctx, {
+    x: leftX,
+    y: row2Y,
+    width: cardWidth,
+    height: cardHeight,
+    type: "warning",
+    label: "専用SP未装備",
+  });
+
+  drawClanBattleLegendCard(ctx, {
+    x: rightX,
+    y: row2Y,
+    width: cardWidth,
+    height: cardHeight,
+    type: "cr",
+    label: "コネクトランク",
+  });
+
+  ctx.restore();
+}
+
+function drawClanBattleLegendCard(ctx, options) {
+  const {
+    x,
+    y,
+    width,
+    height,
+    type,
+    label,
+  } = options;
+
+  ctx.save();
+
+  ctx.fillStyle = "#ffffff";
+  roundRect(ctx, x, y, width, height, 10, true, false);
+
+  ctx.strokeStyle = "#e5e7eb";
+  ctx.lineWidth = 1;
+  roundRect(ctx, x, y, width, height, 10, false, true);
+
+  const iconBoxWidth = 44;
+  const iconCenterX = x + iconBoxWidth / 2 + 8;
+  const centerY = y + height / 2;
+  const labelX = x + iconBoxWidth + 18;
+
+  if (type === "duplicate") {
+    ctx.strokeStyle = "#ef4444";
+    ctx.lineWidth = 3;
+    roundRect(
+      ctx,
+      iconCenterX - 11,
+      centerY - 11,
+      22,
+      22,
+      5,
+      false,
+      true
+    );
+  } else if (type === "warning") {
+    drawClanBattleWarningIcon(
+      ctx,
+      iconCenterX - 11,
+      centerY - 11
+    );
+  } else if (type === "sp") {
+    drawSpBadge(
+      ctx,
+      iconCenterX + 17,
+      centerY - 12
+    );
+  } else if (type === "cr") {
+    drawCrBadge(
+      ctx,
+      iconCenterX + 14,
+      centerY + 11,
+      15
+    );
+  }
+
+  ctx.fillStyle = "#374151";
+  ctx.font =
+    "bold 12px 'Segoe UI', 'Hiragino Sans', 'Yu Gothic UI', sans-serif";
+  ctx.textAlign = "start";
+  ctx.textBaseline = "middle";
+  ctx.fillText(label, labelX, centerY);
+
+  ctx.restore();
+}
+
+function drawClanBattleUnownedBadge(ctx, rightX, bottomY) {
+  const text = "未";
+  ctx.font = "bold 16px 'Segoe UI', 'Hiragino Sans', 'Yu Gothic UI', sans-serif";
+  const badgeW = 30;
+  const badgeH = 24;
+  const x = rightX - badgeW;
+  const y = bottomY - badgeH;
+
+  ctx.fillStyle = "rgba(190, 18, 60, 0.95)";
+  roundRect(ctx, x, y, badgeW, badgeH, 11, true, false);
+  ctx.fillStyle = "#ffffff";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(text, x + badgeW / 2, y + badgeH / 2 + 0.5);
+}
+
+function showClanBattleResultPreview(config, imageUrl, ownerName) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "clan-battle-result-preview";
+
+  const preview = document.createElement("div");
+  preview.className = "export-preview clan-battle-result-scroll";
+  preview.innerHTML = `<img class="clan-battle-result-image" src="${imageUrl}" alt="クラバトCR一致状況">`;
+  wrapper.appendChild(preview);
+
+  const note = document.createElement("div");
+  note.className = "note";
+  note.textContent = "CRは右下、専用SPありは右上に表示します。未所持キャラは暗く表示されます。重複採用や専用SP未装備は出力画像で警告表示されます。";
+  wrapper.appendChild(note);
+
+  const backBtn = document.createElement("button");
+  backBtn.className = "button";
+  backBtn.textContent = "編成入力に戻る";
+  backBtn.addEventListener("click", () => showClanBattleFormationModal());
+
+  const downloadBtn = document.createElement("a");
+  downloadBtn.className = "button primary";
+  downloadBtn.textContent = "画像を保存";
+  downloadBtn.href = imageUrl;
+  const safeOwner = ownerName.replace(/[\/:*?"<>|]/g, "_");
+  downloadBtn.download = `pricone_clanbattle_cr_${config.year}-${String(config.month).padStart(2, "0")}_${safeOwner}.png`;
+
+  showModal("クラバトCR一致状況プレビュー", wrapper, [backBtn, downloadBtn]);
 }
 
 initializeApp();
