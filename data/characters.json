@@ -13,7 +13,7 @@
     "element": "風",
     "sort": 1,
     "icon": "images/aoi.png",
-    "specialSp": false
+    "specialSp": true
   },
   {
     "id": "0003",
@@ -149,7 +149,7 @@
     "element": "水",
     "sort": 1,
     "icon": "images/ayane_c.png",
-    "specialSp": false
+    "specialSp": true
   },
   {
     "id": "0020",
@@ -245,7 +245,7 @@
     "element": "闇",
     "sort": 1,
     "icon": "images/io.png",
-    "specialSp": false
+    "specialSp": true
   },
   {
     "id": "0032",
@@ -1109,7 +1109,7 @@
     "element": "火",
     "sort": 1,
     "icon": "images/sinobu_h.png",
-    "specialSp": false
+    "specialSp": true
   },
   {
     "id": "0140",
@@ -1285,7 +1285,7 @@
     "element": "風",
     "sort": 1,
     "icon": "images/tika.png",
-    "specialSp": false
+    "specialSp": true
   },
   {
     "id": "0162",
@@ -1293,7 +1293,7 @@
     "element": "水",
     "sort": 1,
     "icon": "images/tika_c.png",
-    "specialSp": false
+    "specialSp": true
   },
   {
     "id": "0163",
@@ -1405,7 +1405,7 @@
     "element": "火",
     "sort": 1,
     "icon": "images/ninon.png",
-    "specialSp": false
+    "specialSp": true
   },
   {
     "id": "0177",
@@ -1941,7 +1941,7 @@
     "element": "火",
     "sort": 1,
     "icon": "images/misogi_h.png",
-    "specialSp": false
+    "specialSp": true
   },
   {
     "id": "0244",
@@ -2157,7 +2157,7 @@
     "element": "光",
     "sort": 1,
     "icon": "images/yui.png",
-    "specialSp": false
+    "specialSp": true
   },
   {
     "id": "0271",
@@ -2437,7 +2437,7 @@
     "element": "風",
     "sort": 1,
     "icon": "images/rima.png",
-    "specialSp": false
+    "specialSp": true
   },
   {
     "id": "0306",
@@ -2741,6 +2741,14 @@
     "element": "闇",
     "sort": 1,
     "icon": "images/fubuki_s.png",
+    "specialSp": false
+  },
+  {
+    "id": "0344",
+    "name": "ヴァンピィ(サマー)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/vanpi_s.png",
     "specialSp": false
   }
 ]
