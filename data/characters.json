@@ -2750,5 +2750,13 @@
     "sort": 1,
     "icon": "images/vanpi_s.png",
     "specialSp": false
+  },
+  {
+    "id": "0345",
+    "name": "ティア",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/tia.png",
+    "specialSp": false
   }
 ]
