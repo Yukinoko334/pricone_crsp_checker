@@ -249,6 +249,36 @@ code {
   min-width: 0;
 }
 
+/* ===== CR帯ごとのカード背景色 ===== */
+.card.cr-tier-0 {
+  background: #ffffff;
+}
+
+.card.cr-tier-1-3 {
+  background: #d6e9ff;
+}
+
+.card.cr-tier-4-6 {
+  background: #ead0bd;
+}
+
+.card.cr-tier-7-9 {
+  background: #dddddd;
+}
+
+.card.cr-tier-10-12 {
+  background: #ffe9a8;
+}
+
+.card.cr-tier-13-15 {
+  background: #e4ccff;
+}
+
+/* CR / 専用SP の入力欄は白背景のまま */
+.card .field select {
+  background: #ffffff;
+}
+
 .card:hover {
   transform: translateY(-2px);
 }

@@ -324,10 +324,33 @@ function render() {
   }
 }
 
+function getCrTierClass(cr) {
+  const value = Number(cr) || 0;
+
+  if (value <= 0) return "cr-tier-0";
+  if (value <= 3) return "cr-tier-1-3";
+  if (value <= 6) return "cr-tier-4-6";
+  if (value <= 9) return "cr-tier-7-9";
+  if (value <= 12) return "cr-tier-10-12";
+  return "cr-tier-13-15";
+}
+
+function updateCardCrColor(card, cr) {
+  card.classList.remove(
+    "cr-tier-0",
+    "cr-tier-1-3",
+    "cr-tier-4-6",
+    "cr-tier-7-9",
+    "cr-tier-10-12",
+    "cr-tier-13-15"
+  );
+  card.classList.add(getCrTierClass(cr));
+}
+
 function renderCard(char) {
   const s = state[char.id];
   const card = document.createElement("div");
-  card.className = `card panel ${s.owned ? "" : "unowned"}`;
+  card.className = `card panel ${s.owned ? "" : "unowned"} ${getCrTierClass(s.cr)}`;
 
   const iconHtml = char.icon
     ? `<img src="${escapeHtml(char.icon)}" alt="${escapeHtml(char.name)}">`
@@ -379,6 +402,7 @@ function renderCard(char) {
 
   crSelect.addEventListener("change", () => {
     state[char.id].cr = Number(crSelect.value);
+    updateCardCrColor(card, state[char.id].cr);
     saveState();
     updateSummary();
   });
