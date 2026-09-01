@@ -2758,5 +2758,13 @@
     "sort": 1,
     "icon": "images/tia.png",
     "specialSp": false
+  },
+  {
+    "id": "0346",
+    "name": "ヴルム(ヴァルムドラッヘ)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/vurumu_v.png",
+    "specialSp": false
   }
 ]
