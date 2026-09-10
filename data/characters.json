@@ -2766,5 +2766,13 @@
     "sort": 1,
     "icon": "images/vurumu_v.png",
     "specialSp": false
+  },
+  {
+    "id": "0347",
+    "name": "リーザ",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/lisa.png",
+    "specialSp": false
   }
 ]
