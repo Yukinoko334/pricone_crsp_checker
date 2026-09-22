@@ -2774,5 +2774,13 @@
     "sort": 1,
     "icon": "images/lisa.png",
     "specialSp": false
+  },
+  {
+    "id": "0348",
+    "name": "クローチェ(サブマリン)",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/kuroche_s.png",
+    "specialSp": false
   }
 ]
