@@ -1,6 +1,6 @@
 {
   "year": 2026,
-  "month": 8,
+  "month": 9,
   "bosses": [
     { "number": 1, "name": "1ボス", "image": "./images/bosses/2026-08/boss1.png" },
     { "number": 2, "name": "2ボス", "image": "./images/bosses/2026-08/boss2.png" },
