@@ -2782,5 +2782,13 @@
     "sort": 1,
     "icon": "images/kuroche_s.png",
     "specialSp": false
+  },
+  {
+    "id": "0349",
+    "name": "サレン(ガンナー)",
+    "element": "闇",
+    "sort": 1,
+    "icon": "images/saren_g.png",
+    "specialSp": false
   }
 ]
