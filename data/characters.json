@@ -2790,5 +2790,13 @@
     "sort": 1,
     "icon": "images/saren_g.png",
     "specialSp": false
+  },
+  {
+    "id": "0350",
+    "name": "アメス(ガンナー)",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/amesu_g.png",
+    "specialSp": false
   }
 ]
