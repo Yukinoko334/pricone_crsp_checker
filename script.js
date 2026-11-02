@@ -462,88 +462,100 @@ function handleShareUrl() {
   showModal("共有URL生成", wrapper, [copyBtn]);
 }
 
+function matchesCrSpExportFilter(charState, selectedCrs, includeOtherCr, includeSp) {
+  if (!charState?.owned) return false;
+  const cr = Number(charState.cr ?? 0);
+  return selectedCrs.has(cr) ||
+    (includeOtherCr && cr > 0 && ![3, 6, 9, 12, 15].includes(cr)) ||
+    (includeSp && Number(charState.sp) === 1);
+}
+
 async function handleExportImages() {
-  try {
-    const grouped = {};
+  const wrapper = document.createElement("div");
+  const filters = document.createElement("fieldset");
+  filters.style.cssText = "margin:0 0 12px;padding:12px;border:1px solid #d1d5db;border-radius:12px;";
+  filters.innerHTML = `
+    <legend>出力するキャラ</legend>
+    <div style="display:flex;flex-wrap:wrap;gap:12px 18px;">
+      ${[3, 6, 9, 12, 15].map((cr) => `<label><input type="checkbox" data-export-cr="${cr}" checked> CR${cr}</label>`).join("")}
+      <label><input type="checkbox" data-export-other checked> その他のCR</label>
+      <label><input type="checkbox" data-export-sp> 専用SPあり</label>
+    </div>
+    <div class="note">選んだCR、または専用SPありのキャラを出力します。その他のCR：1・2・4・5・7・8・10・11・13・14。</div>
+  `;
+  wrapper.appendChild(filters);
+  const status = document.createElement("div");
+  status.className = "note";
+  status.setAttribute("role", "status");
+  status.setAttribute("aria-live", "polite");
+  wrapper.appendChild(status);
+  const preview = document.createElement("div");
+  wrapper.appendChild(preview);
+  let generation = 0;
 
-    for (const element of ELEMENTS) {
-      grouped[element] = characters
-        .filter((c) => c.element === element)
-        .filter((c) => state[c.id].cr > 0)
-        .sort((a, b) =>
-          state[b.id].cr - state[a.id].cr ||
-          a.sort - b.sort ||
-          a.name.localeCompare(b.name, "ja")
-        );
-    }
-
-    const totalCount = Object.values(grouped).reduce((sum, list) => sum + list.length, 0);
-    const wrapper = document.createElement("div");
-
-    if (totalCount === 0) {
-      wrapper.innerHTML = `
-        <p>現在は画像出力対象がありません。</p>
-        <div class="note">CR が 1 以上のキャラを登録すると、画像を出力できます。</div>
-      `;
-      showModal("CR&専用SP画像出力", wrapper);
+  async function updatePreview() {
+    const currentGeneration = ++generation;
+    const selectedCrs = new Set([...filters.querySelectorAll("[data-export-cr]:checked")].map((input) => Number(input.dataset.exportCr)));
+    const includeOtherCr = filters.querySelector("[data-export-other]").checked;
+    const includeSp = filters.querySelector("[data-export-sp]").checked;
+    preview.replaceChildren();
+    if (selectedCrs.size === 0 && !includeOtherCr && !includeSp) {
+      status.textContent = "出力する条件を1つ以上選択してください。";
       return;
     }
-
-    const pageGroups = buildExportPageGroups(ELEMENTS, 2);
-    const pages = [];
-
-    for (const pageElements of pageGroups) {
-      const pageHasAny = pageElements.some((element) => (grouped[element] || []).length > 0);
-      if (!pageHasAny) continue;
-
-      const url = await drawExportPageCanvas(grouped, pageElements);
-      pages.push({
-        pageNo: pages.length + 1,
-        elements: pageElements,
-        url,
-      });
+    status.textContent = "画像を生成しています…";
+    try {
+      const grouped = {};
+      for (const element of ELEMENTS) {
+        grouped[element] = characters
+          .filter((char) => char.element === element && matchesCrSpExportFilter(state[char.id], selectedCrs, includeOtherCr, includeSp))
+          .sort((a, b) => state[b.id].cr - state[a.id].cr || a.sort - b.sort || a.name.localeCompare(b.name, "ja"));
+      }
+      const totalCount = Object.values(grouped).reduce((sum, list) => sum + list.length, 0);
+      if (totalCount === 0) {
+        status.textContent = "選択した条件に該当するキャラがいません。";
+        return;
+      }
+      const images = document.createElement("div");
+      images.className = "preview-images";
+      let pageNo = 0;
+      for (const pageElements of buildExportPageGroups(ELEMENTS, 2)) {
+        if (!pageElements.some((element) => grouped[element].length > 0)) continue;
+        const url = await drawExportPageCanvas(grouped, pageElements);
+        if (currentGeneration !== generation) return;
+        pageNo++;
+        const block = document.createElement("div");
+        block.className = "preview-block";
+        const heading = document.createElement("h3");
+        heading.textContent = `画像${pageNo} (${pageElements.join("・")}属性)`;
+        const image = document.createElement("img");
+        image.src = url;
+        image.alt = `画像${pageNo}`;
+        const download = document.createElement("a");
+        download.className = "button primary";
+        download.textContent = `画像${pageNo}を保存`;
+        download.href = url;
+        download.download = `pricone_export_page${pageNo}.png`;
+        download.style.cssText = "display:inline-flex;align-items:center;justify-content:center;margin-top:10px;";
+        block.append(heading, image, download);
+        images.appendChild(block);
+      }
+      if (currentGeneration !== generation) return;
+      const scroll = document.createElement("div");
+      scroll.className = "export-preview";
+      scroll.appendChild(images);
+      preview.replaceChildren(scroll);
+      status.textContent = `選択した条件に該当するキャラ：${totalCount}人`;
+    } catch (error) {
+      if (currentGeneration !== generation) return;
+      console.error("画像出力エラー:", error);
+      status.textContent = "画像出力に失敗しました。条件を変更して再度お試しください。";
     }
-
-    const wrapperPreview = document.createElement("div");
-    wrapperPreview.className = "export-preview";
-
-    const images = document.createElement("div");
-    images.className = "preview-images";
-
-    for (const page of pages) {
-      const block = document.createElement("div");
-      block.className = "preview-block";
-      block.innerHTML = `
-        <h3>画像${page.pageNo} (${page.elements.join("・")}属性)</h3>
-        <img src="${page.url}" alt="画像${page.pageNo}">
-      `;
-
-      const dl = document.createElement("a");
-      dl.className = "button primary";
-      dl.textContent = `画像${page.pageNo}を保存`;
-      dl.href = page.url;
-      dl.download = `pricone_export_page${page.pageNo}.png`;
-      dl.style.display = "inline-flex";
-      dl.style.alignItems = "center";
-      dl.style.justifyContent = "center";
-      dl.style.marginTop = "10px";
-
-      block.appendChild(dl);
-      images.appendChild(block);
-    }
-
-    wrapperPreview.appendChild(images);
-    wrapper.appendChild(wrapperPreview);
-    wrapper.insertAdjacentHTML(
-      "beforeend",
-      `<div class="note">CR 1 以上のキャラを属性ごとに画像出力しています。</div>`
-    );
-
-    showModal("CR&専用SP画像出力", wrapper);
-  } catch (error) {
-    console.error("画像出力エラー:", error);
-    alert("画像出力でエラーが発生しました。F12 の Console を確認してください。");
   }
+
+  filters.addEventListener("change", updatePreview);
+  showModal("CR&専用SP画像出力", wrapper);
+  await updatePreview();
 }
 
 async function handleExportUnownedImages() {

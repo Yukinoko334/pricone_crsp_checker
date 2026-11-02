@@ -2798,5 +2798,29 @@
     "sort": 1,
     "icon": "images/amesu_g.png",
     "specialSp": false
+  },
+  {
+    "id": "0351",
+    "name": "アグライア",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/aglia.png",
+    "specialSp": false
+  },
+  {
+    "id": "0352",
+    "name": "ゴールドシップ",
+    "element": "水",
+    "sort": 1,
+    "icon": "images/goldship.png",
+    "specialSp": false
+  },
+  {
+    "id": "0353",
+    "name": "アーモンドアイ",
+    "element": "光",
+    "sort": 1,
+    "icon": "images/armondai.png",
+    "specialSp": false
   }
 ]
