@@ -2822,5 +2822,21 @@
     "sort": 1,
     "icon": "images/armondai.png",
     "specialSp": false
+  },
+  {
+    "id": "0354",
+    "name": "ラッキーライラック",
+    "element": "火",
+    "sort": 1,
+    "icon": "images/lucky_lilac.png",
+    "specialSp": false
+  },
+  {
+    "id": "0355",
+    "name": "デアリングタクト",
+    "element": "風",
+    "sort": 1,
+    "icon": "images/daring_tact.png",
+    "specialSp": false
   }
 ]
