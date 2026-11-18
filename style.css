@@ -850,30 +850,104 @@ code {
   }
 }
 
-.rental-party-table {
-  width: 100%;
-  border-collapse: collapse;
+.modal .rental-comparison-note {
+  font-size: 0.8rem;
+}
+
+.rental-party-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 12px;
+  max-height: 65vh;
+  overflow: auto;
+}
+
+.rental-element-card {
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.rental-element-heading {
+  display: inline-block;
+  margin: 0;
+  padding: 3px 10px;
+  border-radius: 999px;
+  color: #111827;
   font-size: 0.875rem;
 }
 
-.rental-party-table th,
-.rental-party-table td {
-  padding: 6px 4px;
-  border-bottom: 1px solid var(--border);
+.rental-party-heading {
+  margin: 8px 0 4px;
+  font-size: 0.8rem;
+}
+
+.rental-party-members {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 3px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rental-member {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
   text-align: center;
 }
 
-.rental-party-table th:first-child {
-  text-align: left;
+.rental-member-portrait {
+  width: min(100%, 46px);
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 9px;
+  background: #e2e8f0;
 }
 
-.rental-party-table .rental-gain {
+.rental-member-portrait img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rental-member-name {
+  width: 100%;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.rental-member-name,
+.rental-member-ownership,
+.rental-member-value {
+  font-size: 0.65rem;
+}
+
+.rental-member-ownership {
+  color: #475569;
+}
+
+.rental-member-value {
+  width: 100%;
+  max-width: 65px;
+  border-radius: 4px;
+  background: #e2e8f0;
+  line-height: 1.4;
+}
+
+.rental-member-value.rental-gain {
   background: #dbeafe;
   color: #1e40af;
   font-weight: 700;
 }
 
-.rental-party-table .rental-loss {
+.rental-member-value.rental-loss {
   background: #fee2e2;
   color: #991b1b;
   font-weight: 700;

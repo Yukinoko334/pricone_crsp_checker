@@ -2699,16 +2699,27 @@ async function showRentalPartyComparison() {
     }
 
     const note = document.createElement("p");
-    note.textContent = "青はセットのCRが高い、またはSPが新たに付く項目です。赤はセットのCRが手持ちより低い項目です。";
-    content.replaceChildren(note);
+    note.className = "rental-comparison-note";
+    note.textContent = "手持ち → セット。青はCR上昇・SP新規、赤はセットのCRが低い項目です。「?」は未確認です。";
 
-    for (const party of parties) {
-      const section = document.createElement("section");
+    const grid = document.createElement("div");
+    grid.className = "rental-party-grid";
+    for (const element of ELEMENTS) {
+      const group = parties.filter((party) => party.element === element);
+      if (!group.length) continue;
+
+      const card = document.createElement("section");
+      card.className = "rental-element-card";
       const heading = document.createElement("h3");
-      heading.textContent = `${party.name}（${party.element}・${party.type}）`;
-      section.append(heading, createRentalPartyTable(party, characterById));
-      content.append(section);
+      heading.className = "rental-element-heading " + elementClass(element);
+      heading.textContent = element + "属性";
+      card.append(heading);
+      for (const party of group) {
+        card.append(createRentalPartyRow(party, characterById));
+      }
+      grid.append(card);
     }
+    content.replaceChildren(note, grid);
   } catch (error) {
     console.error("レンタルパーティ比較:", error);
     content.textContent = `編成を表示できません。data/rental_parties.json を確認してください。（${error.message}）`;
@@ -2740,52 +2751,58 @@ function validateRentalParties(parties, characterById) {
   }
 }
 
-function createRentalPartyTable(party, characterById) {
-  const table = document.createElement("table");
-  table.className = "rental-party-table";
-  table.setAttribute("aria-label", party.name);
-  const header = table.createTHead().insertRow();
-  for (const label of ["キャラ", "所持", "手持ち CR", "セット CR", "手持ち SP", "セット SP"]) {
-    const cell = document.createElement("th");
-    cell.scope = "col";
-    cell.textContent = label;
-    header.append(cell);
-  }
+function createRentalPartyRow(party, characterById) {
+  const section = document.createElement("section");
+  const heading = document.createElement("h4");
+  heading.className = "rental-party-heading";
+  heading.textContent = party.name.includes(party.type) ? party.name : party.name + "（" + party.type + "）";
 
-  const body = table.createTBody();
+  const members = document.createElement("ul");
+  members.className = "rental-party-members";
   for (const member of party.members) {
     const char = characterById.get(member.characterId);
     const owned = state[char.id];
-    const row = body.insertRow();
-    const name = document.createElement("th");
-    name.scope = "row";
+    const tile = document.createElement("li");
+    tile.className = "rental-member";
+
+    const portrait = document.createElement("div");
+    portrait.className = "rental-member-portrait";
+    if (char.icon) {
+      const image = document.createElement("img");
+      image.src = char.icon;
+      image.alt = "";
+      image.addEventListener("error", () => image.remove(), { once: true });
+      portrait.append(image);
+    }
+
+    const name = document.createElement("div");
+    name.className = "rental-member-name";
     name.textContent = char.name;
-    row.append(name);
-    row.insertCell().textContent = owned.owned ? "所持済み" : "未所持";
-    row.insertCell().textContent = owned.owned ? owned.cr : "—";
+    name.title = char.name;
 
-    const cr = row.insertCell();
-    cr.textContent = member.cr ?? "未確認";
-    if (member.cr !== null) {
-      const difference = member.cr - owned.cr;
-      if (difference > 0) {
-        cr.classList.add("rental-gain");
-        cr.textContent += `（+${difference}）`;
-      } else if (difference < 0) {
-        cr.classList.add("rental-loss");
-        cr.textContent += `（${difference}）`;
-      }
-    }
+    const ownership = document.createElement("span");
+    ownership.className = "rental-member-ownership";
+    ownership.textContent = owned.owned ? "所持済み" : "未所持";
 
-    row.insertCell().textContent = owned.owned ? (owned.sp === 1 ? "あり" : "なし") : "—";
-    const sp = row.insertCell();
-    sp.textContent = member.sp === null ? "未確認" : member.sp ? "あり" : "なし";
-    if (member.sp === true && owned.sp !== 1) {
-      sp.classList.add("rental-gain");
-      sp.textContent = "あり（新規）";
-    }
+    const cr = document.createElement("span");
+    cr.className = "rental-member-value";
+    cr.textContent = "CR " + (owned.owned ? owned.cr : "—") + "→" + (member.cr ?? "?");
+    if (member.cr !== null && member.cr > owned.cr) cr.classList.add("rental-gain");
+    if (member.cr !== null && member.cr < owned.cr) cr.classList.add("rental-loss");
+
+    const sp = document.createElement("span");
+    sp.className = "rental-member-value";
+    const ownedSp = owned.sp === 1;
+    const currentSp = owned.owned ? (ownedSp ? "有" : "無") : "—";
+    const rentalSp = member.sp === null ? "?" : member.sp ? "有" : "無";
+    sp.textContent = "SP " + currentSp + "→" + rentalSp;
+    if (member.sp === true && !ownedSp) sp.classList.add("rental-gain");
+
+    tile.append(portrait, name, ownership, cr, sp);
+    members.append(tile);
   }
-  return table;
+  section.append(heading, members);
+  return section;
 }
 
 initializeApp();
