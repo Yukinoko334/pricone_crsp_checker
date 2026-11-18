@@ -2759,6 +2759,9 @@ function createRentalPartyRow(party, characterById) {
 
   const members = document.createElement("ul");
   members.className = "rental-party-members";
+  let totalCrGain = 0;
+  let newSpCount = 0;
+
   for (const member of party.members) {
     const char = characterById.get(member.characterId);
     const owned = state[char.id];
@@ -2786,22 +2789,40 @@ function createRentalPartyRow(party, characterById) {
 
     const cr = document.createElement("span");
     cr.className = "rental-member-value";
-    cr.textContent = "CR " + (owned.owned ? owned.cr : "—") + "→" + (member.cr ?? "?");
-    if (member.cr !== null && member.cr > owned.cr) cr.classList.add("rental-gain");
-    if (member.cr !== null && member.cr < owned.cr) cr.classList.add("rental-loss");
+    cr.textContent = `CR ${owned.cr}→${member.cr ?? "?"}`;
+    if (member.cr !== null) {
+      const difference = member.cr - owned.cr;
+      if (difference > 0) {
+        totalCrGain += difference;
+        cr.textContent += `(+${difference})`;
+        cr.classList.add("rental-gain");
+      } else if (difference < 0) {
+        cr.classList.add("rental-loss");
+      }
+    }
 
     const sp = document.createElement("span");
     sp.className = "rental-member-value";
     const ownedSp = owned.sp === 1;
-    const currentSp = owned.owned ? (ownedSp ? "有" : "無") : "—";
+    const currentSp = ownedSp ? "有" : "無";
     const rentalSp = member.sp === null ? "?" : member.sp ? "有" : "無";
     sp.textContent = "SP " + currentSp + "→" + rentalSp;
-    if (member.sp === true && !ownedSp) sp.classList.add("rental-gain");
+    if (member.sp === true && !ownedSp) {
+      newSpCount += 1;
+      sp.textContent += "(+有)";
+      sp.classList.add("rental-gain");
+    }
 
     tile.append(portrait, name, ownership, cr, sp);
     members.append(tile);
   }
   section.append(heading, members);
+  if (totalCrGain > 0 || newSpCount > 0) {
+    const summary = document.createElement("p");
+    summary.className = "rental-party-summary";
+    summary.textContent = `このPTを購入した場合CRは合計+${totalCrGain}、専用SPは${newSpCount}(無→有)人になります。`;
+    section.append(summary);
+  }
   return section;
 }
 
