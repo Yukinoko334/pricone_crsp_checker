@@ -849,3 +849,32 @@ code {
     grid-template-columns: 1fr;
   }
 }
+
+.rental-party-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.rental-party-table th,
+.rental-party-table td {
+  padding: 6px 4px;
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+
+.rental-party-table th:first-child {
+  text-align: left;
+}
+
+.rental-party-table .rental-gain {
+  background: #dbeafe;
+  color: #1e40af;
+  font-weight: 700;
+}
+
+.rental-party-table .rental-loss {
+  background: #fee2e2;
+  color: #991b1b;
+  font-weight: 700;
+}

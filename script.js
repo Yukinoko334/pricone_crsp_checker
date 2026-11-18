@@ -47,6 +47,7 @@ async function initializeApp() {
     spFilter.addEventListener("change", render);
     exportMenuBtn.addEventListener("click", showExportMenu);
     clanBattleBtn.addEventListener("click", showClanBattleFormationModal);
+    document.getElementById("rentalPartyBtn").addEventListener("click", showRentalPartyComparison);
     bulkOwnedBtn.addEventListener("click", handleBulkOwned);
     bulkUnownedBtn.addEventListener("click", handleBulkUnowned);
     bulkApplyBtn.addEventListener("click", showBulkApplyModal);
@@ -2678,6 +2679,113 @@ function showClanBattleResultPreview(config, imageUrl, ownerName) {
   downloadBtn.download = `pricone_clanbattle_cr_${config.year}-${String(config.month).padStart(2, "0")}_${safeOwner}.png`;
 
   showModal("クラバトCR一致状況プレビュー", wrapper, [backBtn, downloadBtn]);
+}
+
+async function showRentalPartyComparison() {
+  const content = document.createElement("div");
+  content.textContent = "編成を読み込み中…";
+  showModal("レンタルパーティ比較", content);
+
+  try {
+    const response = await fetch("./data/rental_parties.json", { cache: "no-cache" });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const parties = await response.json();
+    const characterById = new Map(characters.map((char) => [char.id, char]));
+    validateRentalParties(parties, characterById);
+
+    if (parties.length === 0) {
+      content.textContent = "比較する編成がありません。data/rental_parties.json に編成を登録してください。";
+      return;
+    }
+
+    const note = document.createElement("p");
+    note.textContent = "青はセットのCRが高い、またはSPが新たに付く項目です。赤はセットのCRが手持ちより低い項目です。";
+    content.replaceChildren(note);
+
+    for (const party of parties) {
+      const section = document.createElement("section");
+      const heading = document.createElement("h3");
+      heading.textContent = `${party.name}（${party.element}・${party.type}）`;
+      section.append(heading, createRentalPartyTable(party, characterById));
+      content.append(section);
+    }
+  } catch (error) {
+    console.error("レンタルパーティ比較:", error);
+    content.textContent = `編成を表示できません。data/rental_parties.json を確認してください。（${error.message}）`;
+  }
+}
+
+function validateRentalParties(parties, characterById) {
+  if (!Array.isArray(parties)) throw new Error("編成は配列で登録してください");
+
+  const partyIds = new Set();
+  for (const party of parties) {
+    if (!party || typeof party.id !== "string" || !party.id.trim() ||
+        partyIds.has(party.id) || typeof party.name !== "string" || !party.name.trim() ||
+        !ELEMENTS.includes(party.element) || !["物理", "魔法"].includes(party.type) ||
+        !Array.isArray(party.members) || party.members.length < 1 || party.members.length > 5) {
+      throw new Error(`編成の設定が不正です: ${party?.id ?? "ID未設定"}`);
+    }
+
+    partyIds.add(party.id);
+    const memberIds = new Set();
+    for (const member of party.members) {
+      if (!member || !characterById.has(member.characterId) || memberIds.has(member.characterId) ||
+          (member.cr !== null && (!Number.isInteger(member.cr) || member.cr < 0 || member.cr > 15)) ||
+          (member.sp !== null && typeof member.sp !== "boolean")) {
+        throw new Error(`${party.name} のキャラ設定が不正です: ${member?.characterId ?? "ID未設定"}`);
+      }
+      memberIds.add(member.characterId);
+    }
+  }
+}
+
+function createRentalPartyTable(party, characterById) {
+  const table = document.createElement("table");
+  table.className = "rental-party-table";
+  table.setAttribute("aria-label", party.name);
+  const header = table.createTHead().insertRow();
+  for (const label of ["キャラ", "所持", "手持ち CR", "セット CR", "手持ち SP", "セット SP"]) {
+    const cell = document.createElement("th");
+    cell.scope = "col";
+    cell.textContent = label;
+    header.append(cell);
+  }
+
+  const body = table.createTBody();
+  for (const member of party.members) {
+    const char = characterById.get(member.characterId);
+    const owned = state[char.id];
+    const row = body.insertRow();
+    const name = document.createElement("th");
+    name.scope = "row";
+    name.textContent = char.name;
+    row.append(name);
+    row.insertCell().textContent = owned.owned ? "所持済み" : "未所持";
+    row.insertCell().textContent = owned.owned ? owned.cr : "—";
+
+    const cr = row.insertCell();
+    cr.textContent = member.cr ?? "未確認";
+    if (member.cr !== null) {
+      const difference = member.cr - owned.cr;
+      if (difference > 0) {
+        cr.classList.add("rental-gain");
+        cr.textContent += `（+${difference}）`;
+      } else if (difference < 0) {
+        cr.classList.add("rental-loss");
+        cr.textContent += `（${difference}）`;
+      }
+    }
+
+    row.insertCell().textContent = owned.owned ? (owned.sp === 1 ? "あり" : "なし") : "—";
+    const sp = row.insertCell();
+    sp.textContent = member.sp === null ? "未確認" : member.sp ? "あり" : "なし";
+    if (member.sp === true && owned.sp !== 1) {
+      sp.classList.add("rental-gain");
+      sp.textContent = "あり（新規）";
+    }
+  }
+  return table;
 }
 
 initializeApp();

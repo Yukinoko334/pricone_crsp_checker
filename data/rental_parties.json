@@ -1,0 +1,132 @@
+[
+  {
+    "id": "fire-physical",
+    "name": "火属性編成",
+    "element": "火",
+    "type": "物理",
+    "members": [
+      { "characterId": "0181", "cr": 6, "sp": false },
+      { "characterId": "0132", "cr": 6, "sp": false },
+      { "characterId": "0139", "cr": 6, "sp": true },
+      { "characterId": "0004", "cr": 6, "sp": false },
+      { "characterId": "0187", "cr": 6, "sp": false }
+    ]
+  },
+  {
+    "id": "fire-magic",
+    "name": "火魔法編成",
+    "element": "火",
+    "type": "魔法",
+    "members": [
+      { "characterId": "0314", "cr": 6, "sp": false },
+      { "characterId": "0048", "cr": 6, "sp": false },
+      { "characterId": "0292", "cr": 6, "sp": false },
+      { "characterId": "0231", "cr": 6, "sp": false },
+      { "characterId": "0077", "cr": 6, "sp": false }
+    ]
+  },
+  {
+    "id": "water-physical",
+    "name": "水物理編成",
+    "element": "水",
+    "type": "物理",
+    "members": [
+      { "characterId": "0316", "cr": 6, "sp": false },
+      { "characterId": "0155", "cr": 6, "sp": true },
+      { "characterId": "0126", "cr": 6, "sp": false },
+      { "characterId": "0140", "cr": 6, "sp": false },
+      { "characterId": "0287", "cr": 6, "sp": false }
+    ]
+  },
+  {
+    "id": "water-magic",
+    "name": "水魔法編成",
+    "element": "水",
+    "type": "魔法",
+    "members": [
+      { "characterId": "0184", "cr": 6, "sp": false },
+      { "characterId": "0064", "cr": 6, "sp": false },
+      { "characterId": "0017", "cr": 6, "sp": false },
+      { "characterId": "0150", "cr": 6, "sp": true },
+      { "characterId": "0081", "cr": 6, "sp": false }
+    ]
+  },
+  {
+    "id": "wind-physical",
+    "name": "風物理編成",
+    "element": "風",
+    "type": "物理",
+    "members": [
+      { "characterId": "0329", "cr": 6, "sp": false },
+      { "characterId": "0127", "cr": 6, "sp": false },
+      { "characterId": "0129", "cr": 6, "sp": false },
+      { "characterId": "0111", "cr": 6, "sp": false },
+      { "characterId": "0286", "cr": 6, "sp": false }
+    ]
+  },
+  {
+    "id": "wind-magic",
+    "name": "風魔法編成",
+    "element": "風",
+    "type": "魔法",
+    "members": [
+      { "characterId": "0014", "cr": 6, "sp": false },
+      { "characterId": "0152", "cr": 6, "sp": false },
+      { "characterId": "0082", "cr": 6, "sp": false },
+      { "characterId": "0042", "cr": 6, "sp": false },
+      { "characterId": "0164", "cr": 6, "sp": false }
+    ]
+  },
+  {
+    "id": "light-physical",
+    "name": "光物理編成",
+    "element": "光",
+    "type": "物理",
+    "members": [
+      { "characterId": "0144", "cr": 6, "sp": false },
+      { "characterId": "0192", "cr": 6, "sp": false },
+      { "characterId": "0294", "cr": 6, "sp": false },
+      { "characterId": "0241", "cr": 6, "sp": false },
+      { "characterId": "0145", "cr": 6, "sp": true }
+    ]
+  },
+  {
+    "id": "light-magic",
+    "name": "光魔法編成",
+    "element": "光",
+    "type": "魔法",
+    "members": [
+      { "characterId": "0096", "cr": 6, "sp": false },
+      { "characterId": "0026", "cr": 6, "sp": true },
+      { "characterId": "0234", "cr": 6, "sp": false },
+      { "characterId": "0291", "cr": 6, "sp": false },
+      { "characterId": "0196", "cr": 6, "sp": false }
+    ]
+  },
+  {
+    "id": "dark-physical",
+    "name": "闇物理編成",
+    "element": "闇",
+    "type": "物理",
+    "members": [
+      { "characterId": "0166", "cr": 6, "sp": false },
+      { "characterId": "0098", "cr": 6, "sp": false },
+      { "characterId": "0198", "cr": 6, "sp": false },
+      { "characterId": "0055", "cr": 6, "sp": false },
+      { "characterId": "0249", "cr": 6, "sp": true }
+    ]
+  },
+  {
+    "id": "dark-magic",
+    "name": "闇魔法編成",
+    "element": "闇",
+    "type": "魔法",
+    "members": [
+      { "characterId": "0085", "cr": 6, "sp": false },
+      { "characterId": "0122", "cr": 6, "sp": false },
+      { "characterId": "0046", "cr": 6, "sp": false },
+      { "characterId": "0217", "cr": 6, "sp": false },
+      { "characterId": "0056", "cr": 6, "sp": false }
+    ]
+  },
+]

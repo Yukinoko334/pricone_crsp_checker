@@ -11,3 +11,28 @@
 - 凡例領域の高さを拡張し、カード下部の見切れを防止
 
 characters.json の再上書きは不要です。
+
+レンタルパーティ比較
+
+data/rental_parties.json に購入セットの編成を登録します。
+各編成の id は重複しない文字列、element は「火」「水」「風」「光」「闇」、
+type は「物理」「魔法」です。members に1～5人を登録します。
+characterId は data/characters.json の id を先頭のゼロも含めて指定します。
+cr は 0～15 の整数、sp は装備ありなら true、なしなら false です。
+確認できていない項目には null を指定します。
+
+登録形式の例（キャラと付与値は説明用です）:
+[
+  {
+    "id": "fire-physical",
+    "name": "火属性編成",
+    "element": "火",
+    "type": "物理",
+    "members": [
+      { "characterId": "0001", "cr": 6, "sp": false }
+    ]
+  }
+]
+
+操作メニューの「レンタルパーティ比較」で登録した編成を表示します。
+赤は、セットのCRが手持ちより低いことを示します。
